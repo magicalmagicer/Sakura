@@ -149,6 +149,7 @@ export default {
 
     // 图片上传前处理函数
     beforeAvatarUpload(file) {
+      // console.log(file);
       let imgType = file.type.toLowerCase()
       let limitType = ['image/jpeg', 'image/png', 'image/jpg']
       const isLt2M = file.size / 1024 / 1024 < 2
@@ -164,8 +165,8 @@ export default {
       // 图片信息
       this.articleDetailForm.pic_url = file
       // 如果要阻止默认的发送行为，就返回 false
-      console.log('这是封面')
-      console.log(file)
+      // console.log('这是封面')
+      // console.log(file)
       return false
     },
 

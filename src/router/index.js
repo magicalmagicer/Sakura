@@ -69,7 +69,14 @@ const routes = [
           { path: 'mycard', component: () => import('../views/World/myCard.vue') },
           { path: 'myarticle', component: () => import('../views/World/myArticle.vue') },
           { path: 'mylikers', component: () => import('../views/World/myLikers.vue') },
-          { path: 'mymessage', component: () => import('../views/World/myMessage.vue') }
+          {
+            path: 'mymessage',
+            component: () => import('../views/World/myMessage.vue'),
+            children: [
+              { path: 'leavemessage', component: () => import('../components/leaveMessage.vue') },
+              { path: 'replytocomment', component: () => import('../components/replyToComment.vue') }
+            ]
+          }
         ]
       },
       // 关于

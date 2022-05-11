@@ -29,7 +29,17 @@
             <!-- 评论内容 -->
             <div class="detail">{{ item.content }}</div>
             <div class="button">
-              <el-input v-model="reply" ref="iptRef" clearable v-show="showReplyBox == item.comment_id" width="200px" size="small" :placeholder="'回复 @' + (item.nickname ? item.nickname : item.username)" @keyup.enter.native="replyToComment(item.comment_id)" @blur="showReplyBox = 0"></el-input>
+              <el-input
+                v-model="reply"
+                ref="iptRef"
+                clearable
+                v-show="showReplyBox == item.comment_id"
+                width="200px"
+                size="small"
+                :placeholder="'回复 @' + (item.nickname ? item.nickname : item.username)"
+                @keyup.enter.native="replyToComment(item.comment_id, item.from_id)"
+                @blur="showReplyBox = 0"
+              ></el-input>
               <el-button type="text el-icon-chat-dot-square" @click="showReplyIpt(item.comment_id, index)" :disabled="item.reply !== null || author_id !== visitor_id">回复</el-button>
               <el-button class="delete" type="text" @click="handleDelect(item.comment_id)" :disabled="author_id !== visitor_id">删除</el-button>
             </div>
@@ -97,13 +107,14 @@ export default {
       })
     },
     // 回复评论
-    async replyToComment(id) {
+    async replyToComment(id, to_id) {
       const { data: res } = await this.$http.post(
         this.$originUrl + '/article/replycomment',
         this.$qs.stringify({
           comment_id: id,
           content: this.reply,
-          article_id: this.article_id
+          article_id: this.article_id,
+          to_id: to_id
         })
       )
       if (res.status === 1) return this.$message.warning('回复评论失败！')
@@ -139,11 +150,14 @@ export default {
     },
     // 文章评论
     async GetArticleComment() {
+      console.log(this.article_id)
+      // console.log(this.$route.params.id)
       if (this.article_id) {
         const { data: res } = await this.$http.get(this.$originUrl + '/article/getcomment', {
           params: { article_id: this.article_id }
         })
         // console.log(res.data)
+        // console.log('已经获取了新的文章评论')
         this.commentArray = res.data
         if (this.commentArray.length == 0) this.isEmpty = true
       }
@@ -163,13 +177,15 @@ export default {
             content: this.textarea,
             // 有则发送文章id，无则发送0
             article_id: this.article_id,
-            from_id: this.$store.state.id
+            from_id: this.$store.state.id,
+            to_id: this.author_id
           })
         )
         if (res.status === 1) return this.$message.warning('评论失败！')
         this.$message.success('评论成功！')
-        // .then(res => {
-        this.GetArticleComment()
+        setTimeout(() => {
+          location.reload()
+        }, 700)
         this.textarea = ''
         // })
       } else {

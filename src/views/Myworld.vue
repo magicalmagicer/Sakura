@@ -9,17 +9,29 @@
           <el-menu :default-active="activePath" router class="el-menu-vertical-demo" active-text-color="yellow" text-color="#fff">
             <el-menu-item :index="path.card" @click="changePath(path.card)">
               <i class="el-icon-postcard"></i>
-
               <span slot="title">我的资料</span>
             </el-menu-item>
             <el-menu-item :index="path.article" @click="changePath(path.article)">
               <i class="el-icon-notebook-1"></i>
               <span slot="title">我的文章 </span>
             </el-menu-item>
-            <el-menu-item :index="path.message" @click="changePath(path.message)">
-              <i class="el-icon-message"></i>
-              <span slot="title">我的消息</span>
-            </el-menu-item>
+            <el-submenu :index="path.message">
+              <template slot="title">
+                <i class="el-icon-message"></i>
+                <span slot="title">我的消息</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item :index="path.message1" @click="changePath(path.message1)">
+                  <!-- el-icon-document -->
+                  <i class="el-icon-document"></i>
+                  <span slot="title">给我留言 </span>
+                </el-menu-item>
+                <el-menu-item :index="path.message2" @click="changePath(path.message2)">
+                  <i class="el-icon-chat-dot-round"></i>
+                  <span slot="title">回复我的 </span>
+                </el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
             <el-menu-item :index="path.likers" @click="changePath(path.likers)">
               <i class="el-icon-view"></i>
               <span slot="title">谁关注我</span>
@@ -41,7 +53,14 @@ export default {
   // props: ['id'],
   data() {
     return {
-      path: { card: `/myworld/${this.$route.params.id}/mycard`, article: `/myworld/${this.$route.params.id}/myarticle`, message: `/myworld/${this.$route.params.id}/mymessage`, likers: `/myworld/${this.$route.params.id}/mylikers` },
+      path: {
+        card: `/myworld/${this.$route.params.id}/mycard`,
+        article: `/myworld/${this.$route.params.id}/myarticle`,
+        message: `/myworld/${this.$route.params.id}/mymessage`,
+        message1: `/myworld/${this.$route.params.id}/mymessage/leavemessage`,
+        message2: `/myworld/${this.$route.params.id}/mymessage/replytocomment`,
+        likers: `/myworld/${this.$route.params.id}/mylikers`
+      },
       activePath: ''
     }
   },
@@ -65,6 +84,9 @@ export default {
   background-size: cover;
   // background-clip: cov;
 }
+/deep/ .el-menu-item-group__title {
+  padding: 0;
+}
 .el-header {
   // background-color: black;
   color: #333;
@@ -80,16 +102,22 @@ export default {
   color: white;
   text-shadow: 10px 0 20px #fdec84, 10px -10px 30px #ffae35;
 }
-.el-menu-item {
-  padding: 0 !important;
+.el-submenu {
+  /deep/ .el-menu-item {
+    min-width: 100px;
+    padding-left: 50px !important;
+  }
 }
-.el-menu {
+
+/deep/ .el-menu {
   background-color: transparent;
+  border: none;
 }
 .el-aside {
   // background-color: transparent;
   margin-top: 25px;
-  height: 230px;
+  // height: 230px;
+  overflow: visible;
   color: #333;
   text-align: center;
 

@@ -72,6 +72,7 @@ export default {
     async GetArticleDetail() {
       let that = this
       const { data: res } = await this.$http.get(this.$originUrl + '/article/details', { params: { id: that.id } })
+      // console.log('文章详情 ')
       // console.log(res)
       this.data = res.data[0]
       // console.log(this.data)
