@@ -14,7 +14,7 @@
           <el-input prefix-icon="el-icon-user-solid" v-model.string()="ruleForm.nickname" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password" label-width="80px">
-          <el-input type="password" v-model="ruleForm.password" prefix-icon="el-icon-lock"></el-input>
+          <el-input type="password" v-model="ruleForm.password" prefix-icon="el-icon-lock" ref="password"></el-input>
         </el-form-item>
         <el-form-item label-width="80px" label="确认密码" prop="checkPass" v-if="status == 2">
           <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off" prefix-icon="el-icon-lock"></el-input>
@@ -150,50 +150,54 @@ export default {
     },
     // 提交登录
     submitForm() {
-      this.$refs.ruleForm.validate(async valid => {
-        if (valid) {
-          let data = this.$qs.stringify({
-            username: this.ruleForm.username,
-            password: this.ruleForm.password
-          })
-          let res = await this.$http.post(this.$originUrl + '/api/users/login', data)
-          if (res.data.status === 1) {
-            return this.$message.error(res.data.message)
-          } else {
-            // 修改vuex的登录状态
-            this.$store.commit('changIsSignIn', 1)
-            // 设置cookie
-            Cookie.set('token', res.data.token)
-            Cookie.set('username', this.ruleForm.username)
-            Cookie.set('user_id', res.data.id)
-
-            // 修改vuex的token
-            this.$store.commit('setToken', res.data.token)
-            // console.log(res.data)
-            this.$store.commit('setUsername', res.data.username)
-            this.$store.commit('setId', res.data.id)
-            // console.log(res.data)
-            if (res.data.nickname) {
-              // console.log(1)
-              this.name = res.data.nickname
+      if (this.$refs.password.value.trim() == '') {
+        this.$refs.password.focus()
+      } else {
+        this.$refs.ruleForm.validate(async valid => {
+          if (valid) {
+            let data = this.$qs.stringify({
+              username: this.ruleForm.username,
+              password: this.ruleForm.password
+            })
+            let res = await this.$http.post(this.$originUrl + '/api/users/login', data)
+            if (res.data.status === 1) {
+              return this.$message.error(res.data.message)
             } else {
-              // console.log(2)
-              this.name = res.data.username
-            }
+              // 修改vuex的登录状态
+              this.$store.commit('changIsSignIn', 1)
+              // 设置cookie
+              Cookie.set('token', res.data.token)
+              Cookie.set('username', this.ruleForm.username)
+              Cookie.set('user_id', res.data.id)
 
-            // console.log(this.$store.state.token)
-            // this.GetInfo()
-            this.$message.success(`登录成功，${this.name} 欢迎你！`)
-            setTimeout(() => {
-              this.$router.push({ name: 'Index' })
-            }, 1000)
+              // 修改vuex的token
+              this.$store.commit('setToken', res.data.token)
+              // console.log(res.data)
+              this.$store.commit('setUsername', res.data.username)
+              this.$store.commit('setId', res.data.id)
+              // console.log(res.data)
+              if (res.data.nickname) {
+                // console.log(1)
+                this.name = res.data.nickname
+              } else {
+                // console.log(2)
+                this.name = res.data.username
+              }
+
+              // console.log(this.$store.state.token)
+              // this.GetInfo()
+              this.$message.success(`登录成功，${this.name} 欢迎你！`)
+              setTimeout(() => {
+                this.$router.push({ name: 'Index' })
+              }, 1000)
+            }
+          } else {
+            this.$message.error('用户名或者密码不合法！')
+            // console.log('error submit!!')
+            return false
           }
-        } else {
-          this.$message.error('用户名或者密码不合法！')
-          // console.log('error submit!!')
-          return false
-        }
-      })
+        })
+      }
     },
 
     // 提交注册

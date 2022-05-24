@@ -1,12 +1,6 @@
 <template>
   <div class="header">
-    <div class="banner wow zoomIn">
-      <!-- 头像 -->
-      <!-- <div class="headImg wow fadeInUp">
-        <span>🐠</span>
-        <p>罗非鱼海鲜批发市场</p>
-      </div> -->
-    </div>
+    <div class="banner wow zoomIn"></div>
   </div>
 </template>
 

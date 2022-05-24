@@ -2,6 +2,8 @@
   <div>
     <div class="commentTitle">
       <p>留下你的足迹吧~</p>
+      <!-- 点赞 -->
+      <div class="praise el-icon-star-off" @click="praise">觉得不错？点个赞吧</div>
     </div>
     <div class="commentAction">
       <div class="reply">
@@ -97,11 +99,26 @@ export default {
     }
   },
   methods: {
+    // 点赞
+    async praise() {
+      const { data: res } = await this.$http.get(this.$originUrl + '/article/likeStatus', { params: { id: this.$route.params.id, liker_id: Cookie.get('user_id') } })
+      // console.log(res.like_status)
+      if (res.like_status) {
+        return this.$message.info('已经为该文章点赞！')
+      } else {
+        const { data: res } = await this.$http.get(this.$originUrl + '/article/like', { params: { id: this.$route.params.id, liker_id: Cookie.get('user_id') } })
+        console.log(this.$store.state.id)
+        // console.log(res)
+        if (res.status == 0) {
+          return this.$message.success('点赞成功！')
+        } else {
+          return this.$message.warning('点赞失败！')
+        }
+      }
+    },
+    // 展示评论框
     showReplyIpt(id, index) {
-      // console.log(id)
       this.showReplyBox = id
-      // console.log(index)
-      // console.log(this.$refs.iptRef[index])
       this.$nextTick(() => {
         this.$refs.iptRef[index].focus()
       })
@@ -137,7 +154,7 @@ export default {
           const { data: res } = await this.$http.post(this.$originUrl + '/article/deletecomment', this.$qs.stringify({ comment_id: id, visitor_id: this.visitor_id, article_id: this.article_id }))
 
           if (res.status !== 0) return this.$message.warning('删除评论失败！')
-          console.log(res)
+          // console.log(res)
           this.$message.success('删除评论成功！')
           this.GetArticleComment()
         })
@@ -150,7 +167,7 @@ export default {
     },
     // 文章评论
     async GetArticleComment() {
-      console.log(this.article_id)
+      // console.log(this.article_id)
       // console.log(this.$route.params.id)
       if (this.article_id) {
         const { data: res } = await this.$http.get(this.$originUrl + '/article/getcomment', {
@@ -219,12 +236,21 @@ export default {
   color: #555;
 }
 .commentTitle {
+  position: relative;
   text-align: center;
   margin: 20px 0;
   p {
     font-size: 28px;
     font-weight: 600;
     color: brown;
+  }
+  .praise {
+    position: absolute;
+    top: -25px;
+    color: #999;
+    right: 2px;
+    font-size: 12px;
+    cursor: pointer;
   }
 }
 .replyToComemnt {

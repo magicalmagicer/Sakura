@@ -35,7 +35,7 @@
             <span slot="label">
               <span class="label">内容</span>
             </span>
-            <mavon-editor v-model="articleDetailForm.content" :ishljs="true" @imgAdd="imgAdd" @imgDel="imgDel" ref="editorRef"></mavon-editor>
+            <mavon-editor v-model="articleDetailForm.content" :ishljs="true" @imgAdd="imgAdd" @imgDel="imgDel" ref="editorRef" @fullScreen="fullscreen"></mavon-editor>
           </el-form-item>
         </el-form>
       </div>
@@ -88,6 +88,10 @@ export default {
     this.GetAllArticleClassName()
   },
   methods: {
+    // 编辑器全屏
+    fullscreen(status, value) {
+      this.$store.commit('setFullScreen', status)
+    },
     // 图片上传事件
     async imgAdd(pos, file) {
       let imgData = new FormData()

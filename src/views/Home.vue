@@ -1,10 +1,10 @@
 <template>
   <div class="w">
     <!-- 导航栏 -->
-    <el-menu id="header" :default-active="$route.path" class="header-container" mode="horizontal" active-text-color="rgb(219, 165, 183)" router>
+    <el-menu id="header" :default-active="$route.path" class="header-container" mode="horizontal" active-text-color="rgb(219, 165, 183)" router v-show="editorFullScreen">
       <el-menu-item index="/index">首页</el-menu-item>
       <el-menu-item index="/music">听歌</el-menu-item>
-      <el-menu-item @click="toWrite">写文章</el-menu-item>
+      <el-menu-item index="/write">写文章</el-menu-item>
       <el-menu-item index="/about">关于我</el-menu-item>
       <el-menu-item>
         <el-dropdown trigger="hover" szie="mini">
@@ -12,7 +12,7 @@
             <img :src="userAvatar ? userAvatar : userImg" class="user" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="toMyWorld">个人中心</el-dropdown-item>
+            <el-dropdown-item @click.native="toMyWorld" index="/myworld">个人中心</el-dropdown-item>
             <el-dropdown-item @click.native="exit">退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -38,16 +38,25 @@
 import WOW from 'wowjs'
 import Footer from '../components/footer.vue'
 import banner from '../components/banner.vue'
-import record from '../components/record.vue'
 import Cookie from 'js-cookie'
 import FooterBar from '@/components/musicPlayer.vue'
 export default {
   components: {
     Footer,
     banner,
-    record,
+
     FooterBar
   },
+  computed: {
+    editorFullScreen() {
+      return !this.$store.state.fullScreen
+    }
+  },
+  // watch: {
+  //   editorFullScreen(newval, oldval) {
+  //     console.log(newval)
+  //   }
+  // },
   created() {
     this.getUserAvatar()
   },
@@ -60,17 +69,22 @@ export default {
       oldScrollTop: 0
     }
   },
-  methods: {
-    // 跳转写文章页
-    async toWrite() {
+  async beforeRouteUpdate(to, from, next) {
+    // console.log(to, '组件独享守卫beforeRouteEnter第一个参数')
+    if (to.path == '/write') {
       const { data: res } = await this.$http.get(this.$originUrl + '/my/power', { params: { id: Cookie.get('user_id') } })
-      console.log(res.data)
+      // console.log(res.data.power)
       if (res.data.power) {
-        this.$router.push('/write')
+        next()
       } else {
         this.$message.info('您的无权限进入该页面！')
       }
-    },
+      // console.log('我是组件')
+    } else {
+      next()
+    }
+  },
+  methods: {
     exit() {
       // 清除Cookie
       Cookie.remove('token')
@@ -82,7 +96,7 @@ export default {
       this.$store.commit('changIsSignIn', 0)
       // // 修改vuex的token
       // this.$store.commit('setToken', '')
-      // location.reload()
+      // locapam=tion.reload()
     },
     //获取用户头像
     async getUserAvatar() {
@@ -92,7 +106,7 @@ export default {
       // console.log(this.userAvatar)
     },
     toMyWorld() {
-      this.$router.push(`/myworld/${this.$store.state.id}`)
+      this.$router.push(`/myworld/${Cookie.get('user_id')}`)
     },
     handleSelect(key, keyPath) {
       if (key === '/log') {
@@ -134,7 +148,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 #app {
   .footerBar {
     position: absolute;

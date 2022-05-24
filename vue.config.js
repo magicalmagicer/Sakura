@@ -1,17 +1,39 @@
 const CompressionPlugin = require('compression-webpack-plugin')
 module.exports = {
-  publicPath: '/', // 这样表示相对路径， 可以部署在任意路径下，如果为 / 则只能在nginx的html的根路径下面，如果指定为/app/ ，则可以部署在/app下面，默认为/
-  outputDir: 'dist', // 构建输出目录
-  // 放置静态资源的地方 (js/css/img/font/...)
-  assetsDir: 'static',
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
   chainWebpack: config => {
-    config.plugins.delete('prefetch')
+    // config.plugins.delete('prefetch')
+    // 修改标题
+    config.plugin('html').tap(args => {
+      args[0].title = 'MyBlog'
+      return args
+    })
     if (process.env.NODE_ENV === 'production') {
+      config.optimization.minimizer('terser').tap(args => {
+        // 注释console.*
+        args[0].terserOptions.compress.drop_console = true
+        // remove debugger
+        args[0].terserOptions.compress.drop_debugger = true
+        // 移除 console.log
+        args[0].terserOptions.compress.pure_funcs = ['console.log']
+        // 去掉注释 如果需要看chunk-vendors公共部分插件，可以注释掉就可以看到注释了
+        args[0].terserOptions.output = {
+          comments: false
+        }
+        return args
+      })
+
+      // 修改生产环境下的打包入口
+      config
+        .entry('app')
+        .clear()
+        .add('./src/main-prod.js')
       config
         .plugin('webpack-bundle-analyzer')
         .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
         .end()
-      config.plugins.delete('prefetch')
+      // config.plugins.delete('prefetch')
+
       // 为生产环境修改配置...
       config.mode = 'production'
       return {
@@ -23,38 +45,35 @@ module.exports = {
           })
         ]
       }
+    } else {
+      // 开发环境
+      config
+        .entry('app')
+        .clear()
+        .add('./src/main.js')
     }
   },
   devServer: {
-    // port: 8080,
-    // open: true,
-    // disableHostCheck: true,
-    // proxy: 'http://127.0.0.1:5000'
     proxy: {
       //后台服务器
       '/api1': {
         // 匹配所有以 '/api1'开头的请求路径
         target: 'http://127.0.0.1:3007', // 代理目标的基础路径
         changeOrigin: true,
+        // logLevel: 'debug',
         pathRewrite: { '^/api1': '' }
-        //ws: true,//用于配置websocket
-        // changeOrigin: true
       },
       // 网易云api
       '/api2': {
-        // 匹配所有以 '/api1'开头的请求路径
+        // 匹配所有以 '/api2'开头的请求路径
         target: 'http://music.cyrilstudio.top:80', // 代理目标的基础路径
         changeOrigin: true,
         pathRewrite: { '^/api2': '' }
-        //ws: true,//用于配置websocket
-        // changeOrigin: true
       }
     }
   },
+  // productionSourceMap: true,
   configureWebpack: {
-    // devtool
-    devtool: 'eval-source-map'
-    // cheap-eval-source-map
-    // cheap-module-eval-source-map
+    devtool: 'cheap-module-source-map'
   }
 }

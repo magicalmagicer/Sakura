@@ -1,64 +1,41 @@
 <template>
   <div class="about wow slideInLeft">
     <div class="headerImg">
-      <img src="../assets/about.png" alt="" />
+      <img src="../assets/about.jpg" alt="" />
     </div>
-    <h1 class="aboutMe">关于我</h1>
+    <h1 class="aboutMe">About Me</h1>
     <el-divider><i class="el-icon-s-check"></i></el-divider>
     <div class="aboutItem">
       <div class="info">
         <h1>📝 个人信息</h1>
-        <li class="name">🐟罗废鱼 or 🐠罗非鱼</li>
-        <li>大三在读，现居重庆♨️，</li>
-        <li>在路上的前端学习者🏃‍♀️。</li>
+        <li class="name">愿风裁尘</li>
+        <li>大三在读，现居甘肃</li>
+        <li>在路上的前端学习者</li>
+        <li>希望能和大家一同进步~</li>
       </div>
-      <study></study>
-      <div class="like">
-        <h1>💜 个人爱好</h1>
-        <li>🎤 🎸 🎧 📚</li>
-        <li>
-          🔊
-          <el-image
-            style="width: 35px; height: 35px"
-            :src="require('@/assets/snh48.jpg')"
-          ></el-image>
-          4️⃣8️⃣
-        </li>
-        <p style="font-size: 16px">有机会一起相约剧场...</p>
-      </div>
-    </div>
-    <el-divider><i class="el-icon-s-comment"></i></el-divider>
-    <div class="comment">
-      <comment></comment>
     </div>
   </div>
 </template>
 
 <script>
-import WOW from "wowjs";
-import study from "../components/study.vue";
-import comment from "../components/comment.vue";
+import WOW from 'wowjs'
 export default {
-  components: {
-    study,
-    comment,
-  },
   provide() {
     return {
-      reload: this.reload,
-    };
+      reload: this.reload
+    }
   },
   mounted() {
     let wow = new WOW.WOW({
-      boxClass: "wow",
-      animateClass: "animated",
+      boxClass: 'wow',
+      animateClass: 'animated',
       offset: 0,
       mobile: true,
-      live: false,
-    });
-    wow.init();
-  },
-};
+      live: false
+    })
+    wow.init()
+  }
+}
 </script>
 
 <style lang="less">
@@ -70,13 +47,13 @@ export default {
   padding: 80px 0;
   width: 100%;
   color: rgb(127, 141, 153);
-  .el-divider--horizontal{
+  .el-divider--horizontal {
     width: 80%;
   }
-  .el-divider__text{
+  .el-divider__text {
     background-color: rgba(248, 248, 248, 0.952);
   }
-  .aboutMe{
+  .aboutMe {
     font-size: 42px;
     width: 300px;
     text-align: center;
@@ -94,7 +71,7 @@ export default {
   }
   .aboutItem {
     display: flex;
-    padding: 50px 0;
+    padding: 0;
     .info {
       display: flex;
       flex-direction: column;

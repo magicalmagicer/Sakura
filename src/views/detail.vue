@@ -5,16 +5,7 @@
       <article-contents id="article" :data="data" :v-loading="loading" :likeCount="likeCount"></article-contents>
       <!-- 评论区 -->
       <comment :article_id="id" :author_id="data.author_id" id="comment"></comment>
-      <!-- 左边 点赞、评论 -->
-      <div class="suspended">
-        <div class="suspendedItem" @click="addLike">
-          <div class="icon el-icon-thumb"></div>
-          <el-badge class="mark" />
-        </div>
-        <div class="suspendedItem" @click="toComment">
-          <div class="icon el-icon-chat-line-round"></div>
-        </div>
-      </div>
+
       <!-- <el-backtop></el-backtop> -->
     </div>
   </div>
@@ -57,8 +48,15 @@ export default {
   created() {
     this.GetArticleDetail()
     this.getLikeStatus()
+    this.visit()
   },
   methods: {
+    // 文章访问量
+    async visit() {
+      // console.log('进入了该函数')
+      const { data: res } = await this.$http.get(this.$originUrl + '/article/visit', { params: { id: this.$route.params.id } })
+      // console.log(res)
+    },
     // 获取文章点赞状态
     async getLikeStatus() {
       const { data: res } = await this.$http.get(this.$originUrl + '/article/likeStatus', { params: { id: this.$route.params.id, liker_id: this.$store.state.id } })
@@ -123,46 +121,6 @@ export default {
   width: 270px;
   .el-tag {
     margin-right: 10px;
-  }
-}
-.suspended {
-  position: fixed;
-  bottom: 363px;
-  margin-left: -120px;
-  .suspendedItem {
-    background: #fff;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 100%;
-    border: 1px solid rgba(202, 202, 202, 0.842);
-    transition: all 0.5s ease;
-    cursor: pointer;
-    width: 50px;
-    height: 50px;
-    margin-bottom: 10px;
-    .icon {
-      font-size: 30px;
-      color: #999;
-      transition: all 0.5s ease;
-      .icon :hover {
-        color: brown;
-      }
-    }
-
-    .el-badge__content {
-      position: absolute;
-      background-color: brown;
-      padding: 2px 5px 3px;
-      top: -28px;
-      right: -20px;
-      transform: scale(0.75);
-      transition: all 0.5s ease;
-    }
-    & :hover {
-      color: brown;
-    }
   }
 }
 </style>

@@ -52,7 +52,7 @@ export default {
           // 确认删除
           // console.log('删除成功');
           const {data:res} = await this.$http.get(this.$originUrl + '/article/delete',{params:{id:id}}) 
-          console.log(res.data);
+          // console.log(res.data);
           if (res.status !== 0) return this.$message.waring('删除文章失败！')
           this.$message.success('删除文章成功！')
           this.GetAllArticle()

@@ -3,6 +3,7 @@
     <!-- 搜索框 -->
     <el-input style="width: 200px" placeholder="找找看吧" v-model.trim()="keywords" ref="inputRef" clearable @focus="getHotSearch" @blur="showInfoTip = false" prefix-icon="el-icon-search" @keyup.enter.native="searchMusic"></el-input>
     <el-button type="primary" @click="searchMusic">搜索</el-button>
+    <div class="tip">双击就能播放选中歌曲哦~</div>
     <!-- 热搜榜 -->
     <transition name="el-fade-in">
       <div class="search-info_tip" v-show="showInfoTip">
@@ -20,30 +21,16 @@
               </div>
             </div>
           </el-card>
-          <!-- <div class="hot-search">
-            <div class="hot-title font-14">热搜榜</div>
-            <div class="hot-item pointer" :class="{ 'top-item': index < 3 }" v-for="(item, index) in hotList" :key="index" @click="clickHot(item.searchWord)">
-              <div class="item-index">{{ index + 1 }}</div>
-              <div class="item-info">
-                <div class="key-word">
-                  <span class="font-12 item-key">{{ item.searchWord }}</span>
-                </div>
-              </div>
-            </div>
-          </div> -->
         </div>
       </div>
     </transition>
     <!-- 歌曲列表 -->
     <el-table :data="songList" style="width: 100%;padding:10px 20px;margin-top:30px" @row-dblclick="playMusic" stripe highlight-current-row>
-      <!-- <el-table-column prop="date" label="日期" width="180"> </el-table-column> -->
       <el-table-column type="index" label="#" header-align="center" width="100pxpx" align="center"> </el-table-column>
       <el-table-column prop="name" label="歌名" header-align="center" width="215px"> </el-table-column>
       <el-table-column prop="singer" label="歌手" header-align="center" align="center" width="215px"> </el-table-column>
       <el-table-column prop="album" label="专辑" header-align="center" align="center" width="215px" class="over"> </el-table-column>
       <el-table-column prop="duration" label="时长" header-align="center" align="center" width="px"> </el-table-column>
-      <!-- <el-table-column label="操作" header-align="left"> <i class="el-icon-video-play pointer" @click="playSong(item.id)"></i></el-table-column> -->
-      <!-- <el-table-column prop="address" label="地址"> </el-table-column> -->
     </el-table>
   </div>
 </template>
@@ -190,6 +177,13 @@ export default {
     background-color: #fff;
     z-index: 100;
     color: #000;
+  }
+  .tip {
+    position: absolute;
+    right: 0;
+    color: #fff;
+    font-family: 'cute';
+    font-size: 12px;
   }
 }
 /* 热搜区域 */

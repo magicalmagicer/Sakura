@@ -16,7 +16,17 @@ export default new Vuex.Store({
     PlayState: false,
     musicInfo: {},
     // 当前歌曲播放进度
-    CurrenTime: 0
+    CurrenTime: 0,
+    // 留言列表
+    leaveMessage: [],
+    // 消息状态改变
+    messageStatusChange: false,
+    // 回复列表
+    reply: [],
+    // 点赞列表
+    likeMessage: [],
+    // 编辑器全屏
+    fullScreen: false
   },
   mutations: {
     changIsSignIn(state, n) {
@@ -48,6 +58,23 @@ export default new Vuex.Store({
     },
     setCurrenTime(state, val) {
       state.CurrenTime = val
+    },
+    // 留言
+    setLeaveMessage(state, val) {
+      state.leaveMessage = val
+    },
+    // 回复
+    setReply(state, val) {
+      state.reply = val
+    },
+    setMessageStatusChange(state, val) {
+      state.messageStatusChange = val
+    },
+    setLikeMessage(state, val) {
+      state.likeMessage = val
+    },
+    setFullScreen(state, val) {
+      state.fullScreen = val
     }
   },
   getters: {

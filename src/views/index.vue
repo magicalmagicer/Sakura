@@ -51,7 +51,7 @@
       <el-card class="box-card card_content" shadow="hover" :body-style="{ width: '100%' }" v-for="(item, index) in AllArticle" :key="index">
         <!-- 文章首部 -->
         <div slot="header" class="clearfix articlebg">
-          <router-link :to="{ name: 'Detail', params: { id: item.id } }" @click.native="visit(item.id)">
+          <router-link :to="{ name: 'Detail', params: { id: item.id } }">
             <h3>
               {{ item.title }}
             </h3>
@@ -70,7 +70,7 @@
         <!-- 点赞量 -->
         <p class="hot">
           <span class="el-icon-thumb">点赞({{ item.like_count }})</span>
-          <span> 阅读({{ item.visited_count }})</span>
+          <span class="el-icon-reading"> 阅读({{ item.visited_count }})</span>
           <span class="el-icon-time">{{ item.create_time }}</span>
         </p>
       </el-card>
@@ -133,13 +133,11 @@ export default {
   filters: {},
   methods: {
     // 文章访问量
-    async visit(articleId) {
-      // console.log(articleId)
-      let self = this
-      const { data: res } = await this.$http.get(this.$originUrl + 'article/visit', { params: { id: articleId } })
-      // console.log('文章访问')
-      // console.log(res)
-    },
+    // async visit(articleId) {
+    //   console.log(articleId)
+    //   const { data: res } = await this.$http.get(this.$originUrl + 'article/visit', { params: { id: articleId } })
+    //   console.log(res)
+    // },
     // 预览图关闭
     closeViewer() {
       this.imgViewerVisible = false
@@ -191,15 +189,6 @@ export default {
       } else {
         // 根据标签获取文章
         var { data: res } = await this.$http.get(this.$originUrl + '/article/get', { params: { key: this.key, curPage: this.currentPage, pageSize: this.pageSize } })
-        // if (res.status === 1) {
-        //   if (res.message === '身份认证失败！') this.$router.push('/Log')
-        //   return
-        // }
-        console.log('已经查询了关键字')
-        console.log(res.data)
-        // this.AllArticle = res.data
-        // this.count = res.count
-        // this.$store.commit('setCount', this.count)
       }
       if (res.status === 1) {
         if (res.message === '身份认证失败！') this.$router.push('/Log')
@@ -227,7 +216,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 #app {
   .margin {
     margin-top: 96px;
@@ -250,7 +239,7 @@ export default {
       box-sizing: content-box;
       .box-card {
         // background: rgba(255, 255, 255, 0.829);
-        width: 290px;
+        width: 293px;
         .el-card__header {
           // margin-bottom: 10px;
           width: 100%;
@@ -261,7 +250,7 @@ export default {
         .tag {
           .hover {
             cursor: pointer;
-            margin: 5px;
+            margin: 4px;
           }
           display: flex;
           // justify-content: space-between;
@@ -380,9 +369,10 @@ export default {
           font-size: 14px;
           // margin: 15px 0px;
         }
-        .el-card__body {
+        /deep/ .el-card__body {
           margin: 0;
-          width: 100%;
+          // width: %;
+          width: 480px;
           box-sizing: border-box;
           .text {
             overflow: hidden;

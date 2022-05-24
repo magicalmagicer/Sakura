@@ -10,7 +10,7 @@
     <br />
     <br />
     <span class="copyright"><b>版权所有</b> 水煮今生</span>
-    <el-drawer title="联系我">
+    <el-drawer title="联系我" :visible.sync="drawer" direction="btt" :modal="false" size="7%">
       <p class="info">
         <i class="el-icon-phone"></i>电话：151****0055<br />
         <i class="el-icon-message"></i>邮箱：miaolf19@lzu.edu.cn<br />
@@ -18,8 +18,20 @@
     </el-drawer>
   </div>
 </template>
+<script>
+export default {
+  data() {
+    return {
+      drawer: false
+    }
+  }
+}
+</script>
 
 <style lang="less" scoped>
+/deep/ .el-drawer__header {
+  margin-bottom: 0;
+}
 .footer {
   height: 150px;
   text-align: center;

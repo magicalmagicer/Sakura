@@ -34,12 +34,12 @@
             <span slot="label">
               <span class="label">内容</span>
             </span>
-            <mavon-editor v-model="articleForm.content" :ishljs="true"></mavon-editor>
+            <mavon-editor v-model="articleForm.content" :ishljs="true" @fullScreen="fullscreen" codeStyle="tomorrow-night"></mavon-editor>
           </el-form-item>
         </el-form>
       </div>
       <div class="button">
-        <el-button type="success">保存文章</el-button>
+        <el-button type="success" @click="trigger">保存文章</el-button>
         <el-button type="danger" @click="submitArticle">发布文章</el-button>
       </div>
     </el-main>
@@ -80,9 +80,15 @@ export default {
     this.GetAllArticleClassName()
   },
   methods: {
-    // log() {
-    //   console.log(this.category)
-    // },
+    trigger() {
+      this.$message.info('我还是个摆设哦，文章写完就点击发布吧。')
+    },
+    // 编辑器全屏
+    fullscreen(status, value) {
+      this.$store.commit('setFullScreen', status)
+      // console.log(status)
+      // console.log(value)
+    },
     // 文章发布
     async submitArticle() {
       // console.log(this.$store.state.username)
@@ -127,7 +133,7 @@ export default {
     async GetAllArticleClassName() {
       const { data: res } = await this.$http.get(this.$originUrl + '/article/cates')
       this.AllArticleClassName = res.data
-      console.log(res.data)
+      // console.log(res.data)
       // this.tagCount = this.AllArticleClassName.length
       // this.$store.commit('setTagCount', this.tagCount)
     }

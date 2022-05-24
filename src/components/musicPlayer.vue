@@ -75,7 +75,7 @@ export default {
   // props: ['songId'],
   data() {
     return {
-      playerVisible: true,
+      playerVisible: false,
       musicId: 0,
       musicUrl: '',
       // isPlay: false,

@@ -2,7 +2,7 @@
   <div id="app" class="container">
     <!-- <el-backtop>回到顶部</el-backtop> -->
     <el-backtop>
-      <div class="backtop">
+      <div class="backtop" title="回到顶部" @click="go">
         <!-- <img src="" width="40px"/> -->
       </div>
     </el-backtop>
@@ -116,13 +116,25 @@ export default {
       })
       init()
     })()
+  },
+  methods: {
+    go() {
+      // this.$message.success('出发，目标——彩虹海！')
+      this.$message({
+        // dangerouslyUseHTMLString: true,
+        message: '出发，目标——彩虹海！',
+        center: true,
+        duration: 900,
+        type: 'success'
+      })
+    }
   }
 }
 </script>
 
 <style lang="less">
 .backtop {
-  background-image: url('./assets/user.png');
+  background-image: url('./assets/star.webp');
   background-size: cover;
   height: 40px;
   width: 40px;
