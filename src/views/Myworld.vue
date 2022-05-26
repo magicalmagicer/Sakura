@@ -97,23 +97,37 @@ export default {
     },
     // 获取消息列表
     async getMessage() {
-      const { data: res1 } = await this.$http.get(this.$originUrl + '/article/getmessage', { params: { id: Cookie.get('user_id'), type: 1 } })
-      const { data: res2 } = await this.$http.get(this.$originUrl + '/article/getmessage', { params: { id: Cookie.get('user_id'), type: 2 } })
-      const { data: res3 } = await this.$http.get(this.$originUrl + '/article/getlike', { params: { id: Cookie.get('user_id') } })
-      console.log(res2)
-      this.leaveMessage = res1.data
-      // this.$store.setLeaveMessage(this.leaveMessage)
-      this.$store.commit('setLeaveMessage', this.leaveMessage)
-      // console.log('修改了leaveMessag')
-      this.replyToComment = res2.data
-      this.likeMessage = res3.data
+      // const { data: res1 } = await this.$http.get(this.$originUrl + '/article/getmessage', { params: { id: Cookie.get('user_id'), type: 1 } })
+      // const { data: res2 } = await this.$http.get(this.$originUrl + '/article/getmessage', { params: { id: Cookie.get('user_id'), type: 2 } })
+      // const { data: res3 } = await this.$http.get(this.$originUrl + '/article/getlike', { params: { id: Cookie.get('user_id') } })
+      var p1 = this.$http.get(this.$originUrl + '/article/getmessage', { params: { id: Cookie.get('user_id'), type: 1 } })
+      var p2 = this.$http.get(this.$originUrl + '/article/getmessage', { params: { id: Cookie.get('user_id'), type: 2 } })
+      var p3 = this.$http.get(this.$originUrl + '/article/getlike', { params: { id: Cookie.get('user_id') } })
+      Promise.all([p1, p2, p3])
+        .then(result => {
+          // console.log(result[0])
+          let { data: res1 } = result[0]
+          let { data: res2 } = result[1]
+          let { data: res3 } = result[2]
+          this.leaveMessage = res1.data
+          this.replyToComment = res2.data
+          this.likeMessage = res3.data
+          // 提交vuex数据
+          this.$store.commit('setLeaveMessage', this.leaveMessage)
+          this.$store.commit('setReply', this.replyToComment)
+          this.$store.commit('setLikeMessage', this.likeMessage)
+          // console.log(this.likeMessage.length)
+          // 消息数量
+          this.count1 = res1.count
+          this.count2 = res2.count
+          this.count3 = res3.count
+        })
+        .catch(err => {
+          this.$message.warning(err)
+        })
 
-      // console.log(res3)
-      this.$store.commit('setReply', this.replyToComment)
-      this.$store.commit('setLikeMessage', this.likeMessage)
-      this.count1 = res1.count
-      this.count2 = res2.count
-      this.count3 = res3.count
+      // console.log(res1)
+      // console.log(res2)
 
       // console.log(res3)
     }

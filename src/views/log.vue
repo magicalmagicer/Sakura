@@ -28,7 +28,7 @@
         </el-form-item>
       </el-form>
       <span class="tip" v-if="status == 1">没有注册？去<span class="sign" @click="toSign">注册</span></span>
-      <span class="tip" style="color: #409eff; padding-left: 20px" v-if="status == 1" @click="toAdmin">管理员登录</span>
+      <!-- <span class="tip" style="color: #409eff; padding-left: 20px" v-if="status == 1" @click="toAdmin">管理员登录</span> -->
       <span class="tip" v-if="status == 2">已有账号？去<span class="sign" @click="toLogin">登录</span></span>
     </div>
     <!-- <h1 v-else>哈哈哈哈哈</h1> -->
@@ -46,16 +46,6 @@ export default {
     }
   },
   data() {
-    // var validatePass = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('请输入密码'))
-    //   } else {
-    //     if (this.ruleForm.checkPass !== '') {
-    //       this.$refs.ruleForm.validateField('checkPass')
-    //     }
-    //     callback()
-    //   }
-    // }
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
@@ -120,22 +110,7 @@ export default {
         // })
       }, 5000)
     },
-    // 封面上传相关方法
-    // handleAvatarSuccess(res) {
-    //   this.imageUrl = res.data
-    // },
-    // beforeAvatarUpload(file) {
-    //   const isJPG = file.type === 'image/jpeg'
-    //   const isLt2M = file.size / 1024 / 1024 < 2
 
-    //   if (!isJPG) {
-    //     this.$message.error('上传头像图片只能是 JPG 格式!')
-    //   }
-    //   if (!isLt2M) {
-    //     this.$message.error('上传头像图片大小不能超过 2MB!')
-    //   }
-    //   return isJPG && isLt2M
-    // },
     // 跳转到注册
     toSign() {
       this.status = 2
@@ -307,6 +282,9 @@ export default {
     h3 {
       color: #fff;
       font-family: 'Arial';
+    }
+    .sign {
+      cursor: pointer;
     }
     .el-form {
       width: 350px;

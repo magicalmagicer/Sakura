@@ -139,21 +139,25 @@ export default {
     },
     // 保存用户信息
     async saveUserInfo() {
-      if (this.originForm !== this.userInfoForm || this.changeAvatar) {
+      if (JSON.stringify(this.originForm) !== JSON.stringify(this.userInfoForm) || this.changeAvatar) {
         const params = new FormData()
         if (this.userInfoForm.avatar !== this.originImgUrl) {
           params.append('file', this.userInfoForm.avatar)
-          if (this.originImgUrl !== '') {
+          // console.log(this.originImgUrl)
+          if (this.originImgUrl !== null) {
+            // console.log(1)
             params.append('oldavatar', this.originImgUrl.split('avatar/')[1])
           }
         }
         // 依次将文章相关信息添加到params表单中
+        // console.log(this.userInfoForm.username)
         params.append('username', this.userInfoForm.username)
         params.append('nickname', this.userInfoForm.nickname)
         // console.log(params)
         const { data: res } = await this.$http.post(this.$originUrl + '/my/userinfo', params)
         if (res.status !== 0) return this.$message.warning('修改用户信息失败！')
         this.$message.success('修改用户信息成功！')
+        this.getUserInfo()
       } else {
         // console.log(this.userInfoForm)
         return this.$message.info('未对个人信息进行修改！')
@@ -164,9 +168,11 @@ export default {
       const { data: res } = await this.$http.get(this.$originUrl + '/my/userinfo', { params: { id: Cookie.get('user_id') } })
       if (res.status !== 0) return this.$message.warning('获取用户信息失败！')
       this.userInfoForm = res.data
-      this.originForm = res.data
+      // this.originForm = res.data
+      this.originForm = JSON.parse(JSON.stringify(this.userInfoForm))
       // console.log(this.userInfoForm)
       this.originImgUrl = this.userInfoForm.avatar
+      // console.log(this.originImgUrl)
       this.imgUrl = this.userInfoForm.avatar
       // console.log(res)
     },
@@ -183,6 +189,7 @@ export default {
       }
       // 预览图地址
       this.imgUrl = URL.createObjectURL(file)
+      // console.log(this.imgUrl)
       // 图片信息
       this.userInfoForm.avatar = file
       // 添加头像修改判断

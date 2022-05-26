@@ -11,15 +11,16 @@
         <div class="right el-icon-view" @click="toSee(item.article_id)" title="去看看"></div>
       </div>
       <i class="divider"></i>
-      <!-- <el-divider></el-divider> -->
     </div>
-
-    <!-- <i class="di</divvider"></i> -->
+    <div v-if="likeMessage.length === 0" class="nothing">还没人给你点赞哦~</div>
   </div>
 </template>
 
 <script>
 export default {
+  created() {
+    console.log(this.likeMessage.length)
+  },
   computed: {
     likeMessage() {
       return this.$store.state.likeMessage
@@ -54,6 +55,9 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.nothing {
+  text-align: center;
+}
 .container {
   position: relative;
   padding: 5px;
