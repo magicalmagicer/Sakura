@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import Cookie from 'js-cookie'
 export default {
   data() {
     return {
@@ -56,7 +57,7 @@ export default {
         content: '',
         category: '',
         cover: '',
-        author: 1
+        author: 0
         // time: ''
       },
       AllArticleClassName: [],
@@ -102,8 +103,8 @@ export default {
       params.append('title', this.articleForm.title)
       params.append('content', this.articleForm.content)
       params.append('category', this.category)
-      params.append('author_id', this.articleForm.author)
-
+      params.append('author_id', Cookie.get('user_id'))
+      // console.log(params)
       const { data: res } = await this.$http.post(this.$originUrl + '/article/add', params)
       if (res.status !== 0) return this.$message.warning('文章发布失败！')
       this.$message.success('文章发布成功！')

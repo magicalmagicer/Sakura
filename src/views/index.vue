@@ -132,12 +132,6 @@ export default {
   },
   filters: {},
   methods: {
-    // 文章访问量
-    // async visit(articleId) {
-    //   console.log(articleId)
-    //   const { data: res } = await this.$http.get(this.$originUrl + 'article/visit', { params: { id: articleId } })
-    //   console.log(res)
-    // },
     // 预览图关闭
     closeViewer() {
       this.imgViewerVisible = false
