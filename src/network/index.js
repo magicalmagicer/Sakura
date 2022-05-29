@@ -1,4 +1,4 @@
-import axios from 'axios'
+// import axios from 'axios'
 import Cookies from 'js-cookie'
 export default function setAxios() {
   //请求拦截

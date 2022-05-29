@@ -1,4 +1,5 @@
 const CompressionPlugin = require('compression-webpack-plugin')
+const webpack = require('webpack')
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
   chainWebpack: config => {
@@ -9,6 +10,41 @@ module.exports = {
       return args
     })
     if (process.env.NODE_ENV === 'production') {
+      // var externals = {
+      //   vue: 'Vue',
+      //   axios: 'axios',
+      //   'element-ui': 'ElementUI',
+      //   'vue-router': 'VueRouter',
+      //   vuex: 'Vuex'
+      // }
+      // config.externals(externals)
+      // const cdn = {
+      //   // 从cdn中获取对象文件，减少打包体积
+      //   css: [
+      //     // element-ui css
+      //     'https://cdn.bootcdn.net/ajax/libs/element-ui/2.12.0/theme-chalk/index.css',
+      //     // nprogress
+      //     'https://cdn.bootcdn.net/ajax/libs/nprogress/0.2.0/nprogress.min.css'
+      //   ],
+      //   js: [
+      //     // vue
+      //     'https://cdn.bootcdn.net/ajax/libs/vue/2.6.10/vue.min.js',
+      //     // vue-router
+      //     'https://cdn.bootcdn.net/ajax/libs/vue-router/3.1.3/vue-router.min.js',
+      //     // vuex
+      //     'https://cdn.bootcdn.net/ajax/libs/vuex/3.1.2/vuex.min.js',
+      //     // axios
+      //     'https://cdn.bootcdn.net/ajax/libs/axios/0.18.0/axios.min.js',
+      //     // element-ui js
+      //     'https://cdn.bootcdn.net/ajax/libs/element-ui/2.12.0/index.js'
+      //   ]
+      // }
+      // // 通过 html-webpack-plugin 将 cdn 注入到 index.html 之中
+      // config.plugin('html').tap(args => {
+      //   args[0].cdn = cdn
+      //   return args
+      // })
+
       config.optimization.minimizer('terser').tap(args => {
         // 注释console.*
         args[0].terserOptions.compress.drop_console = true
@@ -36,15 +72,16 @@ module.exports = {
 
       // 为生产环境修改配置...
       config.mode = 'production'
-      return {
-        plugins: [
-          new CompressionPlugin({
-            test: /\.js$|\.html$|\.css$|\.mp3$/, //匹配文件名
-            threshold: 10240, //对超过10k的数据进行压缩
-            deleteOriginalAssets: false //是否删除原文件
-          })
-        ]
-      }
+
+      // return {
+      //   plugins: [
+      //     new CompressionPlugin({
+      //       test: /\.js$|\.html$|\.css$|\.mp3$/, //匹配文件名
+      //       threshold: 10240, //对超过10k的数据进行压缩
+      //       deleteOriginalAssets: false //是否删除原文件
+      //     })
+      //   ]
+      // }
     } else {
       // 开发环境
       config
@@ -72,8 +109,40 @@ module.exports = {
       }
     }
   },
-  // productionSourceMap: true,
+  productionSourceMap: false,
   configureWebpack: {
-    devtool: 'cheap-module-source-map'
+    devtool: 'cheap-module-source-map',
+    externals: {
+      vue: 'Vue',
+      axios: 'axios',
+      'element-ui': 'ElementUI',
+      'vue-router': 'VueRouter',
+      vuex: 'Vuex'
+    },
+    plugins: [
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      // 下面两项配置才是 compression-webpack-plugin 压缩配置
+      // 压缩成 .gz 文件
+      new CompressionPlugin({
+        filename: '[path][base].gz',
+        algorithm: 'gzip',
+        test: /\.(js|css|svg|woff|ttf|json|html)$/,
+        threshold: 10240,
+        minRatio: 0.8
+      })
+      // 压缩成 .br 文件，如果 zlib 报错无法解决，可以注释这段使用代码，一般本地没问题，需要注意线上服务器会可能发生找不到 zlib 的情况。
+      // new CompressionPlugin({
+      //   filename: '[path][base].br',
+      //   algorithm: 'brotliCompress',
+      //   test: /\.(js|css|html|svg)$/,
+      //   compressionOptions: {
+      //     params: {
+      //       [zlib.constants.BROTLI_PARAM_QUALITY]: 11
+      //     }
+      //   },
+      //   threshold: 10240,
+      //   minRatio: 0.8
+      // })
+    ]
   }
 }
