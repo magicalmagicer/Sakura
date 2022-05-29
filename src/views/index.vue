@@ -338,11 +338,8 @@ export default {
           margin: 0;
           margin: 10px 0;
           font-size: 24px;
+          width: 342px;
           // height: 100px;
-          // span {
-          //   position: absolute;
-          //   top: 0;
-          // }
         }
         .el-image {
           cursor: crosshair;

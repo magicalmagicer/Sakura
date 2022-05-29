@@ -173,7 +173,7 @@ export default {
         const { data: res } = await this.$http.get(this.$originUrl + '/article/getcomment', {
           params: { article_id: this.article_id }
         })
-        // console.log(res.data)
+        // console.log(res)
         // console.log('已经获取了新的文章评论')
         this.commentArray = res.data
         if (this.commentArray.length == 0) this.isEmpty = true
