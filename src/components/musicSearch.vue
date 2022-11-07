@@ -74,7 +74,7 @@ export default {
         singer: row.singer,
         totaltime: row.totaltime,
         duration: row.duration,
-        imgUrl: row.artists[0].img1v1Url
+        imgUrl: row.al.picUrl
       }
       // console.log(data)
       this.$store.commit('setMusicInfo', data)
@@ -82,15 +82,16 @@ export default {
     },
     // 获取当日热搜词汇对应歌曲
     async getSongList() {
-      const { data: res } = await this.$http.get(this.$originUrl2 + `/search?keywords=${this.defaultWord}&limit=20`)
+      // console.log(this.defaultWord);
+      const { data: res } = await this.$http.get(this.$originUrl2 + `/cloudsearch?keywords=${this.defaultWord}&limit=20`)
       if (res.code == 200) {
         this.songList = res.result.songs
       }
       this.songList.forEach(item => {
-        item.singer = item.artists[0].name
-        item.album = item.album.name
-        item.totaltime = item.duration
-        item.duration = this.$options.filters['format'](item.duration)
+        item.singer = item.ar[0].name
+        item.album = item.al.name
+        item.totaltime = item.dt
+        item.duration = this.$options.filters['format'](item.dt)
       })
     },
     // 获取默认热词
@@ -129,16 +130,15 @@ export default {
         return this.$message.waring('请输入搜索关键词！')
       }
       this.showInfoTip = false
-      const { data: res } = await this.$http.get(this.$originUrl2 + `/search?keywords=${this.keywords}&limit=20`)
+      const { data: res } = await this.$http.get(this.$originUrl2 + `/cloudsearch?keywords=${this.keywords}&limit=20`)
       // console.log('拿到歌曲列表了')
       if (res.code == 200) {
         this.songList = res.result.songs
         this.songList.forEach(item => {
-          // if (item.url) {
-          item.singer = item.artists[0].name
-          item.album = item.album.name
-          item.totaltime = item.duration
-          item.duration = this.$options.filters['format'](item.duration)
+          item.singer = item.ar[0].name
+          item.album = item.al.name
+          item.totaltime = item.dt
+          item.duration = this.$options.filters['format'](item.dt)
           // }
         })
       }

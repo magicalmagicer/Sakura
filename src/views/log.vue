@@ -21,17 +21,20 @@
         </el-form-item>
 
         <el-form-item style="margin-right: 100px; margin-top: 30px">
-          <el-button type="primary" @click="submitForm()" v-if="status == 1">登录</el-button>
+          <!-- <el-button type="primary" @click="submitForm()" v-if="status == 1 || 3">登录</el-button>
           <el-button type="primary" @click="register()" v-if="status == 2">注册</el-button>
-          <el-button @click="resetForm('ruleForm')" v-if="status == 1">重置</el-button>
-          <el-button @click="resetForm('ruleForm')" v-if="status == 2">重置</el-button>
+          <el-button @click="resetForm('ruleForm')" v-if="status == 1 || 3">重置</el-button>
+          <el-button @click="resetForm('ruleForm')" v-if="status == 2">重置</el-button> -->
+          <el-button type="primary" @click="submitForm()" v-if="status !== 2">登录</el-button>
+          <el-button type="primary" @click="register()" v-if="status == 2">注册</el-button>
+          <el-button @click="resetForm()">重置</el-button>
         </el-form-item>
       </el-form>
       <span class="tip" v-if="status == 1">没有注册？去<span class="sign" @click="toSign">注册</span></span>
-      <!-- <span class="tip" style="color: #409eff; padding-left: 20px" v-if="status == 1" @click="toAdmin">管理员登录</span> -->
+      <span class="tip sign" style="color: #409eff; padding-left: 20px" v-if="status == 1" @click="toAdmin">管理员登录</span>
       <span class="tip" v-if="status == 2">已有账号？去<span class="sign" @click="toLogin">登录</span></span>
+      <span class="tip sign white" v-if="status === 3" @click="toLogin">返回</span>
     </div>
-    <!-- <h1 v-else>哈哈哈哈哈</h1> -->
   </div>
 </template>
 
@@ -102,7 +105,7 @@ export default {
       this.timer = setInterval(() => {
         // this.$nextTick(() => {
         // this.$refs.img.style.opacity = 1
-        this.img_index = this.img_index < 6 ? this.img_index + 1 : 1
+        this.img_index = this.img_index < 3 ? this.img_index + 1 : 1
         this.imgUrl = require(`../assets/${this.img_index}.jpg`)
         setTimeout(() => {
           // this.$refs.img.style.opacity = 0.8
@@ -121,8 +124,9 @@ export default {
     },
     // 跳转到管理员登录页面
     toAdmin() {
-      this.$router.push({ name: 'adminlogin' })
+      this.status = 3
     },
+
     // 提交登录
     submitForm() {
       if (this.$refs.password.value.trim() == '') {
@@ -144,31 +148,38 @@ export default {
               Cookie.set('token', res.data.token)
               Cookie.set('username', this.ruleForm.username)
               Cookie.set('user_id', res.data.id)
+              Cookie.set('user_power', res.data.power)
 
               // 修改vuex的token
               this.$store.commit('setToken', res.data.token)
-              // console.log(res.data)
               this.$store.commit('setUsername', res.data.username)
               this.$store.commit('setId', res.data.id)
-              // console.log(res.data)
               if (res.data.nickname) {
-                // console.log(1)
                 this.name = res.data.nickname
               } else {
-                // console.log(2)
                 this.name = res.data.username
               }
-
-              // console.log(this.$store.state.token)
-              // this.GetInfo()
-              this.$message.success(`登录成功，${this.name} 欢迎你！`)
-              setTimeout(() => {
-                this.$router.push({ name: 'Index' })
-              }, 1000)
+              if (this.status === 1) {
+                this.$message.success(`登录成功，${this.name} 欢迎你！`)
+                setTimeout(() => {
+                  this.$router.push({ name: 'Index' })
+                }, 1000)
+              } else if (this.status === 3) {
+                if (res.data.power >= 2) {
+                  this.$message.success(`登录后台管理系统成功，${this.name} 欢迎你！`)
+                  setTimeout(() => {
+                    this.$router.push('/backstage')
+                  }, 1000)
+                } else {
+                  setTimeout(() => {
+                    this.$router.go(0)
+                  }, 1000)
+                  return this.$message.warning('您不是管理员，无法登录！')
+                }
+              }
             }
           } else {
             this.$message.error('用户名或者密码不合法！')
-            // console.log('error submit!!')
             return false
           }
         })
@@ -185,14 +196,10 @@ export default {
             nickname: this.ruleForm.nickname
           })
           const { data: res } = await this.$http.post(this.$originUrl + '/api/users/register', data)
-          // console.log(res)
           if (res.status === 1) {
-            // console.log(res.data.message);
             return this.$message.error('用户注册失败,请重试！')
           }
-          // console.log(1111)
           this.status = 1
-          // console.log(222)
           this.$message.success('用户注册成功！')
         } else {
           this.$message.error('用户名或者密码不合法！')
@@ -203,15 +210,6 @@ export default {
     resetForm() {
       this.$refs.ruleForm.resetFields()
     },
-
-    // GetInfo() {
-    //   this.$http.get('/api/users/info').then(res => {
-    //     //  获取用户头像地址
-    //     // console.log(res);
-    //     this.nickname = res.data.data.nickname
-    //     this.imageUrl = res.data.data.head_img
-    //   })
-    // },
     async update() {
       await this.$http.post(this.$originUrl + '/api/users/updateUser', {
         nickname: this.nickname,
@@ -233,8 +231,8 @@ export default {
   //   this.setTimer()
   // },
   computed: {
-    login_title: function() {
-      return this.status === 1 ? '用户登录' : '用户注册'
+    login_title: function () {
+      return this.status === 1 ? '用户登录' : this.status === 2 ? '用户注册' : '管理员登录'
     }
   }
 }
@@ -257,7 +255,9 @@ export default {
       transition: 1.5s all;
     }
   }
-
+  .white {
+    color: #fff !important;
+  }
   // margin-bottom: 30px;
   .block {
     // background-color: white;

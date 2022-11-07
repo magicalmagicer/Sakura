@@ -5,8 +5,6 @@
       <article-contents id="article" :data="data" :v-loading="loading" :likeCount="likeCount"></article-contents>
       <!-- 评论区 -->
       <comment :article_id="id" :author_id="data.author_id" id="comment"></comment>
-
-      <!-- <el-backtop></el-backtop> -->
     </div>
   </div>
 </template>
@@ -15,14 +13,11 @@
 import articleContents from '../components/articleContents.vue'
 import comment from '../components/comment.vue'
 import Cookie from 'js-cookie'
-import SideCatalog from 'vue-side-catalog'
-import 'vue-side-catalog/lib/vue-side-catalog.css'
 
 export default {
   components: {
     articleContents,
-    comment,
-    SideCatalog
+    comment
   },
   provide() {
     return {

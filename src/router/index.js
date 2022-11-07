@@ -12,6 +12,7 @@ const routes = [
     name: 'Log',
     component: () => import('../views/log.vue')
   },
+
   // 登录后
   {
     path: '/',
@@ -88,6 +89,16 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
       }
+    ]
+  },
+  // 后台登陆
+  {
+    path: '/backstage',
+    component: () => import('../views/BackStage.vue'),
+    redirect: '/users',
+    children: [
+      { path: '/users', component: () => import('../components/backStage/roles.vue') },
+      { path: '/articles', component: () => import('../components/backStage/article.vue') }
     ]
   }
 ]

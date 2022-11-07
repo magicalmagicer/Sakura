@@ -22,12 +22,8 @@ export default {
       // bookList: [],
       activePath: '/daily',
       menuList: [
-        // { path: '/personalrecom', title: '发现音乐', Login: false, type: 0 },
         { path: '/daily', title: '每日推荐', Login: true, type: 1 },
         { path: '/search', title: '搜索', Login: true, type: 0 }
-        // { path: '/personalfm', title: '私人FM', Login: true, type: 0 },
-        // { path: '/historyplay', title: '最近播放', Login: false, type: 1 },
-        // { path: '/subscribe', title: '我的收藏', Login: true, type: 1 }
       ]
     }
   },

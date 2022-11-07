@@ -188,7 +188,6 @@ export default {
         if (res.message === '身份认证失败！') this.$router.push('/Log')
         return
       }
-
       this.AllArticle = res.data
       this.count = res.count
       this.$store.commit('setCount', this.count)
@@ -213,6 +212,7 @@ export default {
 <style lang="less" scoped>
 #app {
   .margin {
+    // max-height: ;
     margin-top: 96px;
   }
   .el-loading-spinner {

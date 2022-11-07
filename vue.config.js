@@ -70,6 +70,15 @@ module.exports = {
         .end()
       // config.plugins.delete('prefetch')
 
+      config.module
+        .rule('images')
+        .use('image-webpack-loader')
+        .loader('image-webpack-loader')
+        .options({
+          bypassOnDebug: true
+        })
+        .end()
+
       // 为生产环境修改配置...
       config.mode = 'production'
 
@@ -95,7 +104,7 @@ module.exports = {
       //后台服务器
       '/api1': {
         // 匹配所有以 '/api1'开头的请求路径
-        target: 'http://127.0.0.1:3007', // 代理目标的基础路径
+        target: 'http://120.46.168.254:3007', // 代理目标的基础路径
         changeOrigin: true,
         // logLevel: 'debug',
         pathRewrite: { '^/api1': '' }
@@ -103,7 +112,7 @@ module.exports = {
       // 网易云api
       '/api2': {
         // 匹配所有以 '/api2'开头的请求路径
-        target: 'http://music.cyrilstudio.top:80', // 代理目标的基础路径
+        target: 'http://120.46.168.254:3000', // 代理目标的基础路径
         changeOrigin: true,
         pathRewrite: { '^/api2': '' }
       }
@@ -130,19 +139,6 @@ module.exports = {
         threshold: 10240,
         minRatio: 0.8
       })
-      // 压缩成 .br 文件，如果 zlib 报错无法解决，可以注释这段使用代码，一般本地没问题，需要注意线上服务器会可能发生找不到 zlib 的情况。
-      // new CompressionPlugin({
-      //   filename: '[path][base].br',
-      //   algorithm: 'brotliCompress',
-      //   test: /\.(js|css|html|svg)$/,
-      //   compressionOptions: {
-      //     params: {
-      //       [zlib.constants.BROTLI_PARAM_QUALITY]: 11
-      //     }
-      //   },
-      //   threshold: 10240,
-      //   minRatio: 0.8
-      // })
     ]
   }
 }

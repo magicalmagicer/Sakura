@@ -11,6 +11,7 @@ import 'mavon-editor/dist/css/index.css'
 import qs from 'qs'
 // import Vue from 'vue'
 import 'wowjs/css/libs/animate.css'
+// 自己的文件
 import App from './App.vue'
 import setAxios from './network/index.js'
 import router from './router'
@@ -26,9 +27,10 @@ Vue.use(animated)
 Vue.use(mavonEditor) //让Vue使用mavonEditor
 
 Vue.config.productionTip = false
-Vue.prototype.$originUrl = 'http://182.61.53.203:3007'
-// Vue.prototype.$originUrl2 = 'http://music.cyrilstudio.top:80'
-Vue.prototype.$originUrl2 = 'http://182.61.53.203/api2'
+Vue.prototype.$originUrl = 'http://120.46.168.254:3007'
+Vue.prototype.$originUrl2 = 'http://120.46.168.254:3000'
+// Vue.prototype.$originUrl = 'http://182.61.53.203:3007'
+// Vue.prototype.$originUrl2 = 'http://182.61.53.203/api2'
 new Vue({
   router,
   store,

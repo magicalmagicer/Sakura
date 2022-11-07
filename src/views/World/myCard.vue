@@ -8,12 +8,8 @@
         <span slot="label">
           <span class="label">用户名</span>
         </span>
-        <el-input v-model="userInfoForm.username" class="ipt"></el-input>
+        <el-input v-model="userInfoForm.username" class="ipt" disabled></el-input>
       </el-form-item>
-
-      <!-- <el-form-item label="密码" prop="name">
-        <el-input v-model="ruleForm.name"></el-input>
-      </el-form-item> -->
       <el-form-item prop="nickname">
         <span slot="label">
           <span class="label">昵称</span>
@@ -47,13 +43,13 @@
         <span slot="label">
           <span class="label">新密码</span>
         </span>
-        <el-input v-model="secretForm.newSecret" class="ipt"></el-input>
+        <el-input v-model="secretForm.newSecret" class="ipt" show-password></el-input>
       </el-form-item>
       <el-form-item prop="again">
         <span slot="label">
           <span class="label">确认新密码</span>
         </span>
-        <el-input v-model="secretForm.again" class="ipt"></el-input>
+        <el-input v-model="secretForm.again" class="ipt" show-password></el-input>
       </el-form-item>
     </el-form>
     <button class="button" @click="saveSecret" v-if="!editInformation">修改密码</button>
@@ -131,6 +127,8 @@ export default {
             id: Cookie.get('user_id')
           })
           const { data: res } = await this.$http.post(this.$originUrl + '/my/updatepwd', params)
+          if (res.status !== 0) return this.$message.warning('修改密码失败！')
+          return this.$message.success('修改密码成功！')
           // console.log(res)
         } else {
           return this.$message.warning('输入格式有误！')
