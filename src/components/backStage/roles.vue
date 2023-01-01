@@ -288,12 +288,10 @@ export default {
     // 获取用户列表
     async getUserList() {
       const { data: res } = await this.$http.get(this.$originUrl + '/admin/users', { params: this.queryInfo })
-      // console.log(res)
+
       if (res.status !== 0) return this.$message.warning('获取用户列表失败！')
       this.userlist = res.data
-
       this.total = res.count
-      // console.log(this.userlist)
     },
     // 监听pagesize变化
     handleSizeChange(newPageSize) {

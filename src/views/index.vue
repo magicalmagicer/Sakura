@@ -64,8 +64,8 @@
           <el-image style="width: 100px; height: 80px" ref="preview" @click="onPreview(item.pic_url)" :src="item.pic_url" fit="cover"></el-image>
         </div>
         <!-- 文章内容部分预览 -->
-        <div class="text item">
-          {{ item.content }}
+        <div class="text item" v-html="compiledMarkdown(item.content)">
+          <!-- {{ item.content | convert}} -->
         </div>
         <!-- 点赞量 -->
         <p class="hot">
@@ -86,7 +86,18 @@
 <script>
 import WOW from 'wowjs'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
-// import FooterBar from '@/components/musicPlayer.vue'
+import { marked } from 'marked'
+var rendererMD = new marked.Renderer()
+marked.setOptions({
+  renderer: rendererMD,
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  smartLists: true,
+  smartypants: false
+})
+
 export default {
   components: {
     elImageViewer: ElImageViewer
@@ -130,7 +141,21 @@ export default {
     wow.init()
     this.runtime()
   },
-  filters: {},
+  computed: {
+    compiledMarkdown() {
+      return function (text) {
+        return marked(text)
+      }
+    }
+  },
+  // filters: {
+  //   convert(text) {
+  //     // var text = document.getElementById("oriContent").value;
+  //     var html = marked(text);
+  //     // document.getElementById("result").innerHTML = html;
+  //     return html
+  //   }
+  // },
   methods: {
     // 预览图关闭
     closeViewer() {
@@ -204,7 +229,12 @@ export default {
       this.AllArticleClassName = res.data
       this.tagCount = this.AllArticleClassName.length
       this.$store.commit('setTagCount', this.tagCount)
-    }
+    },
+    // convert(){
+    //     var text = document.getElementById("oriContent").value;
+    //     var html = marked(text);
+    //     document.getElementById("result").innerHTML = html;
+    // }
   }
 }
 </script>
@@ -233,7 +263,11 @@ export default {
       box-sizing: content-box;
       .box-card {
         // background: rgba(255, 255, 255, 0.829);
-        width: 293px;
+        width: 293px + 15px;
+        /deep/ .el-card__body {
+          padding-top: 0;
+          padding: 10px;
+        }
         .el-card__header {
           // margin-bottom: 10px;
           width: 100%;
@@ -242,6 +276,7 @@ export default {
           color: #707070;
         }
         .tag {
+          padding: 5px;
           .hover {
             cursor: pointer;
             margin: 4px;
@@ -291,7 +326,7 @@ export default {
       // background: transparent;
       // background-color: #fff;
       margin: 30px 0;
-      padding-left: 100px;
+      padding-left: 155px;
       box-sizing: content-box;
       padding-bottom: 20px;
       // border-left: 1px dashed rgb(201, 201, 201);
@@ -300,13 +335,14 @@ export default {
         display: flex;
         text-align: center;
         justify-content: space-between;
-        margin-left: 80px;
+        margin-left: 100px;
         width: 300px;
-        margin-top: 20px;
-        margin-bottom: 20px;
+        margin-top: 0px;
+        margin-bottom: 30px;
         .el-button {
           margin-left: 0px;
           border-radius: 0;
+          font-size: 13px;
         }
         .el-input__inner {
           border-radius: 0;
@@ -318,7 +354,7 @@ export default {
         background-color: #d8ddf9;
         // background-color: rgba(59, 83, 223, 0.2);
         margin-bottom: 30px;
-        width: 480px;
+        width: 510px;
         border-left: 1px dashed rgb(201, 201, 201);
         .el-card__header {
           padding-bottom: 10px;
@@ -364,13 +400,15 @@ export default {
           margin: 0;
           // width: %;
           width: 480px;
+          padding-top: 0;
           box-sizing: border-box;
           .text {
             overflow: hidden;
             display: -webkit-box;
             word-break: break-all;
+            // height: 160px;
             -webkit-box-orient: vertical;
-            -webkit-line-clamp: 4;
+            -webkit-line-clamp: 5;
             font-size: 14px;
             -webkit-overflow-scrolling: touch;
           }

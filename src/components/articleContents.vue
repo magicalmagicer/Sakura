@@ -9,8 +9,7 @@
           <span class="el-icon-view"> 阅读 ({{ data.visited_count }})</span>
           <span class="icon el-icon-thumb"> 点赞 ({{ likeCount }})</span>
           <span class="icon el-icon-edit">
-            作者: <span class="black">{{ data.nickname ? data.nickname : data.username }}</span></span
-          >
+            作者: <span class="black">{{ data.nickname ? data.nickname : data.username }}</span></span>
         </div>
         <el-button type="text" size="mini" class="back" @click="backward">&lt;返回</el-button>
         <el-button type="text" size="mini" class="edit" @click="toEditor" v-if="myArticle">感觉不满意？再改改吧</el-button>

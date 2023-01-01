@@ -87,6 +87,12 @@ export default {
     // 请求文章分类名称
     this.GetAllArticleClassName()
   },
+  mounted() {
+    // // 获取文本节点
+    // this.$refs.editorRef.addEventListener("paste", (event) => {
+    //   this.paste(event);
+    // });
+  },
   methods: {
     // 编辑器全屏
     fullscreen(status, value) {
@@ -95,8 +101,8 @@ export default {
     // 图片上传事件
     async imgAdd(pos, file) {
       let imgData = new FormData()
-      // console.log('这是内容图片')
-      // console.log(file)
+      console.log('这是内容图片')
+      console.log(pos, file)
       // file.miniurl.replace(/^data:image\/\w+;base64,/, '')
       imgData.append('file', file)
       // console.log(file)
@@ -153,7 +159,7 @@ export default {
 
     // 图片上传前处理函数
     beforeAvatarUpload(file) {
-      // console.log(file);
+      console.log(file);
       let imgType = file.type.toLowerCase()
       let limitType = ['image/jpeg', 'image/png', 'image/jpg']
       const isLt2M = file.size / 1024 / 1024 < 2
@@ -178,7 +184,33 @@ export default {
     async GetAllArticleClassName() {
       const { data: res } = await this.$http.get(this.$originUrl + '/article/cates')
       this.AllArticleClassName = res.data
-    }
+    },
+    // paste(event) {
+    //   // 获取解析 粘贴的文本
+    //   let text = (event.clipboardData || window.clipboardData).getData("text");
+    //   console.log("text", text);
+    // }
+    // this.$ref['editorRef'].addEventListener('paste', function (e) {
+    //   if (!(e.clipboardData && e.clipboardData.items)) {
+    //     return;
+    //   }
+    //   for (var i = 0, len = e.clipboardData.items.length; i < len; i++) {
+    //     var item = e.clipboardData.items[i];
+    //     if (item.kind === "string") {
+    //       item.getAsString(function (str) {
+    //         console.log(str);
+    //       })
+    //     } else if (item.kind === "file") {
+    //       var f = item.getAsFile();
+    //       parseFile(f, 800, function (base64) {
+    //         $.post("/manager/uploadImg", { "imgStr": base64 }, function (data) {
+    //           $('#summernote').summernote('editor.insertImage', data.msg);
+    //         });
+    //       })
+    //       console.log(f);
+    //     }
+    //   }
+    // })
   }
 }
 </script>
@@ -211,6 +243,7 @@ export default {
   color: transparent;
   background-color: white;
   text-shadow: rgba(255, 255, 255, 0.5) 0 5px 6px, rgba(255, 255, 255, 0.2) 1px 3px 3px;
+  background-clip: text;
   -webkit-background-clip: text;
 }
 .v-note-wrapper {

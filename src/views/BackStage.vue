@@ -52,21 +52,24 @@ export default {
       activePath: '',
       // 左侧菜单数据
       menuList: [
-        { id: 1, name: '用户管理', path: 'users', children: [{ id: 10, name: '用户列表', path: 'users' }] },
-        {
-          id: 2,
-          name: '权限管理',
-          path: 'users',
-          children: [
-            { id: 20, name: '权限分配', path: 'rights' }
-            // { id: 21, name: '权限分配', path: 'rights' }
-          ]
-        },
+        { id: 1, name: '用户管理', path: 'users', children: [{ id: 10, name: '用户列表', path: 'users' }, { id: 11, name: '登录信息', path: 'status' }] },
+        // {
+        //   id: 2,
+        //   name: '权限管理',
+        //   path: 'users',
+        //   children: [
+        //     { id: 20, name: '', path: 'rights' }
+        //     // { id: 21, name: '权限分配', path: 'rights' }
+        //   ]
+        // },
         {
           id: 3,
           name: '文章管理',
           path: 'articles',
-          children: [{ id: 30, name: '文章列表', path: 'articles' }]
+          children: [
+            { id: 30, name: '文章列表', path: 'articles' },
+            { id: 31, name: '文章分类', path: 'category' },
+          ]
         }
       ],
       iconsObj: {

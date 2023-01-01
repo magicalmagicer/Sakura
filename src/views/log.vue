@@ -33,11 +33,10 @@
       <span class="tip" v-if="status == 1">没有注册？去<span class="sign" @click="toSign">注册</span></span>
       <span class="tip sign" style="color: #409eff; padding-left: 20px" v-if="status == 1" @click="toAdmin">管理员登录</span>
       <span class="tip" v-if="status == 2">已有账号？去<span class="sign" @click="toLogin">登录</span></span>
-      <span class="tip sign white" v-if="status === 3" @click="toLogin">返回</span>
+      <span class="tip sign white" v-if="status == 3" @click="toLogin">返回</span>
     </div>
   </div>
 </template>
-
 <script>
 import Cookie from 'js-cookie'
 
@@ -138,6 +137,7 @@ export default {
               username: this.ruleForm.username,
               password: this.ruleForm.password
             })
+
             let res = await this.$http.post(this.$originUrl + '/api/users/login', data)
             if (res.data.status === 1) {
               return this.$message.error(res.data.message)
@@ -159,21 +159,21 @@ export default {
               } else {
                 this.name = res.data.username
               }
+              // 普通登录
               if (this.status === 1) {
                 this.$message.success(`登录成功，${this.name} 欢迎你！`)
                 setTimeout(() => {
                   this.$router.push({ name: 'Index' })
                 }, 1000)
               } else if (this.status === 3) {
+                // 管理员登陆
+                console.log('管理员登陆');
                 if (res.data.power >= 2) {
                   this.$message.success(`登录后台管理系统成功，${this.name} 欢迎你！`)
                   setTimeout(() => {
                     this.$router.push('/backstage')
                   }, 1000)
                 } else {
-                  setTimeout(() => {
-                    this.$router.go(0)
-                  }, 1000)
                   return this.$message.warning('您不是管理员，无法登录！')
                 }
               }
@@ -296,10 +296,6 @@ export default {
           font-weight: 700;
           color: #2b2b2b;
           padding: 0;
-        }
-        .el-button--primary {
-          // background-color: #f8baba;
-          // border-color: #f8baba;
         }
       }
     }

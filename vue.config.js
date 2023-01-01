@@ -10,14 +10,15 @@ module.exports = {
       return args
     })
     if (process.env.NODE_ENV === 'production') {
-      // var externals = {
-      //   vue: 'Vue',
-      //   axios: 'axios',
-      //   'element-ui': 'ElementUI',
-      //   'vue-router': 'VueRouter',
-      //   vuex: 'Vuex'
-      // }
-      // config.externals(externals)
+      var externals = {
+        vue: 'Vue',
+        axios: 'axios',
+        'element-ui': 'ElementUI',
+        'vue-router': 'VueRouter',
+        vuex: 'Vuex',
+        echarts: 'echarts'
+      }
+      config.externals(externals)
       // const cdn = {
       //   // 从cdn中获取对象文件，减少打包体积
       //   css: [
@@ -82,15 +83,15 @@ module.exports = {
       // 为生产环境修改配置...
       config.mode = 'production'
 
-      // return {
-      //   plugins: [
-      //     new CompressionPlugin({
-      //       test: /\.js$|\.html$|\.css$|\.mp3$/, //匹配文件名
-      //       threshold: 10240, //对超过10k的数据进行压缩
-      //       deleteOriginalAssets: false //是否删除原文件
-      //     })
-      //   ]
-      // }
+      return {
+        plugins: [
+          new CompressionPlugin({
+            test: /\.js$|\.html$|\.css$|\.mp3$/, //匹配文件名
+            threshold: 10240, //对超过10k的数据进行压缩
+            deleteOriginalAssets: false //是否删除原文件
+          })
+        ]
+      }
     } else {
       // 开发环境
       config
@@ -104,7 +105,9 @@ module.exports = {
       //后台服务器
       '/api1': {
         // 匹配所有以 '/api1'开头的请求路径
-        target: 'http://120.46.168.254:3007', // 代理目标的基础路径
+        // target: 'http://120.46.168.254:3007', // 代理目标的基础路径
+        target: 'http://127.0.0.1:3007', // 代理目标的基础路径
+
         changeOrigin: true,
         // logLevel: 'debug',
         pathRewrite: { '^/api1': '' }
@@ -115,6 +118,12 @@ module.exports = {
         target: 'http://120.46.168.254:3000', // 代理目标的基础路径
         changeOrigin: true,
         pathRewrite: { '^/api2': '' }
+      },
+      '/api3': {
+        // 匹配所有以 '/api2'开头的请求路径
+        target: 'https://restapi.amap.com/v3/ip?', // 代理目标的基础路径
+        changeOrigin: true,
+        pathRewrite: { '^/api3': '' }
       }
     }
   },

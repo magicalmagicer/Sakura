@@ -8,17 +8,20 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
+    "@jiaminghi/data-view": "^2.10.0",
     "animate.css": "^4.1.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.8",
+    "echarts": "^5.4.1",
     "js-cookie": "^2.2.1",
+    "marked": "^4.2.5",
     "mavon-editor": "^2.9.1",
     "module": "^1.2.5",
     "save-dev": "0.0.1-security",
     "serve": "^13.0.2",
     "tocbot": "^4.12.3",
-    "vue": "^2.6.11",
+    "vue": "2.6.11",
     "vue-router": "^3.2.0",
     "vue-side-catalog": "^2.0.0",
     "vuex": "^3.4.0",
@@ -37,7 +40,7 @@
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
     "qs": "^6.10.3",
-    "vue-template-compiler": "^2.6.11",
+    "vue-template-compiler": "2.6.11",
     "webpack": "^4.5.0"
   }
 }

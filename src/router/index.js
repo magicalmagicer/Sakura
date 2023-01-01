@@ -98,7 +98,9 @@ const routes = [
     redirect: '/users',
     children: [
       { path: '/users', component: () => import('../components/backStage/roles.vue') },
-      { path: '/articles', component: () => import('../components/backStage/article.vue') }
+      { path: '/status', component: () => import('../components/backStage/status.vue') },
+      { path: '/articles', component: () => import('../components/backStage/article.vue') },
+      { path: '/category', component: () => import('../components/backStage/category.vue') }
     ]
   }
 ]

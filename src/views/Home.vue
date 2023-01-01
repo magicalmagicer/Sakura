@@ -219,7 +219,7 @@ export default {
   }
 }
 .el-container {
-  width: 1000px;
+  width: 1050px;
   margin: auto;
 }
 </style>
