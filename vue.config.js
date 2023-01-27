@@ -127,16 +127,16 @@ module.exports = {
       }
     }
   },
-  productionSourceMap: false,
+  // productionSourceMap: false,
   configureWebpack: {
-    devtool: 'cheap-module-source-map',
-    externals: {
-      vue: 'Vue',
-      axios: 'axios',
-      'element-ui': 'ElementUI',
-      'vue-router': 'VueRouter',
-      vuex: 'Vuex'
-    },
+    // devtool: 'cheap-module-source-map',
+    // externals: {
+    //   vue: 'Vue',
+    //   axios: 'axios',
+    //   'element-ui': 'ElementUI',
+    //   'vue-router': 'VueRouter',
+    //   vuex: 'Vuex'
+    // },
     plugins: [
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       // 下面两项配置才是 compression-webpack-plugin 压缩配置

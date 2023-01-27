@@ -3,21 +3,8 @@
     <!-- 左边内容 -->
     <el-aside class="margin">
       <div class="wow slideInLeft">
-        <!-- 文章分类 -->
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>文章分类</span>
-          </div>
-          <div class="tag">
-            <el-tag @click="tagEvent('')" color="rgb(176, 250, 185)" class="hover">全部</el-tag>
-            <el-tag plain v-for="(item, index) in AllArticleClassName" :key="index" @click="tagEvent(item.name)" color="rgb(176, 250, 185)" class="hover">
-              {{ item.name }}
-            </el-tag>
-          </div>
-        </el-card>
-
         <!-- 博客信息 -->
-        <el-card class="box-card" style="margin-top: 30px">
+        <el-card class="box-card" style="margin-bottom: 30px">
           <div slot="header" class="clearfix">
             <span><i class="el-icon-coffee"></i>博客信息</span>
           </div>
@@ -36,6 +23,35 @@
             <span> {{ day }}天 </span>
           </div>
         </el-card>
+        <!-- 排行榜 -->
+        <el-card style="margin-bottom: 30px">
+          <div class="active">
+            <div class="clearfix">
+              <span>本月用户活跃度排行</span>
+            </div>
+            <div class="active_item" v-for="(item,index) in activityList" :key="index">
+              <div class="active_title">
+                <!-- <div class="index"></div> -->
+                <div class="active_name">{{index + 1 }}.{{item.nickname}}</div>
+                <div class="activity">{{item.times + '次'}}</div>
+              </div>
+              <el-progress :stroke-width="18" :percentage="progressData(item.times)" :color="selectColor(index)" :text-inside="true"></el-progress>
+            </div>
+          </div>
+        </el-card>
+        <!-- 文章分类 -->
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>文章分类</span>
+          </div>
+          <div class="tag">
+            <el-tag @click="tagEvent('')" color="rgb(176, 250, 185)" class="hover">全部</el-tag>
+            <el-tag plain v-for="(item, index) in AllArticleClassName" :key="index" @click="tagEvent(item.name)" color="rgb(176, 250, 185)" class="hover">
+              {{ item.name }}
+            </el-tag>
+          </div>
+        </el-card>
+
       </div>
     </el-aside>
 
@@ -60,7 +76,6 @@
             </div>
           </router-link>
           <el-image-viewer v-if="imgViewerVisible" :url-list="picList" :on-close="closeViewer" />
-          <!-- {{ item.pic_url }} -->
           <el-image style="width: 100px; height: 80px" ref="preview" @click="onPreview(item.pic_url)" :src="item.pic_url" fit="cover"></el-image>
         </div>
         <!-- 文章内容部分预览 -->
@@ -124,10 +139,14 @@ export default {
       isShow: true,
       // 博客运行时间
       day: 0,
-      key: ''
+      key: '',
+      activityList: [],
+      progressColor: ['#1bf8f3', '#3196e8', '#feb046', '#e8484f', '#9174e4'],
+      first: 0
     }
   },
   created() {
+    this.getUserActivity()
     this.GetAllArticle(this.currentPage, this.pageSize)
   },
   mounted() {
@@ -142,20 +161,20 @@ export default {
     this.runtime()
   },
   computed: {
+    // 渲染文章内容预览
     compiledMarkdown() {
       return function (text) {
         return marked(text)
       }
+    },
+    // 计算百分比
+    progressData() {
+      return function (num) {
+        return (Number(num) / Number(this.first)).toFixed(2) * 100
+      }
     }
+
   },
-  // filters: {
-  //   convert(text) {
-  //     // var text = document.getElementById("oriContent").value;
-  //     var html = marked(text);
-  //     // document.getElementById("result").innerHTML = html;
-  //     return html
-  //   }
-  // },
   methods: {
     // 预览图关闭
     closeViewer() {
@@ -230,11 +249,55 @@ export default {
       this.tagCount = this.AllArticleClassName.length
       this.$store.commit('setTagCount', this.tagCount)
     },
-    // convert(){
-    //     var text = document.getElementById("oriContent").value;
-    //     var html = marked(text);
-    //     document.getElementById("result").innerHTML = html;
-    // }
+    // 获取用户活跃度
+    async getUserActivity() {
+      let time = new Date().toLocaleDateString().split('/')
+      let month = time[1].length > 1 ? time[1] : '0' + time[1]
+      let date = time[0] + '-' + month
+      // console.log(date);
+      const { data: res } = await this.$http.get(this.$originUrl + '/my/activity', {
+        params: {
+          date
+        }
+      })
+      if (res.status !== 0) return
+      this.activityList = res.data
+
+      this.first = res.data[0].times
+
+      console.log(this.first);
+    },
+    // 排行榜颜色
+    selectColor(index) {
+      const r = Math.floor(Math.random() * 256);
+      const g = Math.floor(Math.random() * 256);
+      const b = Math.floor(Math.random() * 256);
+      const color = `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
+      return color;
+      // switch (index) {
+      //   case 0:
+      //     return this.progressColor[index]
+      //     break;
+      //   case 1:
+      //     return this.progressColor[index]
+      //     break;
+      //   case 2:
+      //     return this.progressColor[index]
+      //     break;
+      //   case 3:
+      //     return this.progressColor[index]
+      //     break;
+      //   case 4:
+      //     return this.progressColor[index]
+      //     break;
+      //   case 5:
+      //     return this.progressColor[index]
+      //     break;
+      // }
+    },
+
+
+
   }
 }
 </script>
@@ -244,6 +307,26 @@ export default {
   .margin {
     // max-height: ;
     margin-top: 96px;
+    /deep/ .el-card {
+      width: 308px;
+    }
+    .active {
+      .active_item {
+        margin-top: 10px;
+        .active_title {
+          display: flex;
+          font-size: 13px;
+          .index {
+            font-size: 15px;
+            font-weight: 700;
+          }
+          justify-content: space-between;
+          .active_title {
+            margin-bottom: 2px;
+          }
+        }
+      }
+    }
   }
   .el-loading-spinner {
     i {

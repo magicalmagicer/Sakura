@@ -1,0 +1,6 @@
+// jsconfig.json 文件
+{
+  "vueCompilerOptions": {
+    "target": 2
+  }
+}
