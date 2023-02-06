@@ -152,10 +152,6 @@ export default {
 #app {
   .footerBar {
     position: absolute;
-    // top: 100px;
-    // display: flex;
-    // align-items: center;
-    // justify-content: center;
     bottom: 150px;
     left: 50%;
     transform: translateX(-50%);
@@ -175,10 +171,10 @@ export default {
     transform: translateX(-50%);
   }
   .header-container {
+    box-sizing: border-box;
     width: 100%;
     margin: auto;
     display: flex;
-    // padding-inline-start: 0px !important;
     justify-content: space-around;
     align-items: center;
     position: fixed;

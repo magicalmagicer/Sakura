@@ -145,8 +145,6 @@ export default {
   color: #1989fa;
 }
 #app {
-  // padding: 0;
-  // margin: 0;
   position: absolute;
   display: flex;
   align-content: center;
@@ -155,11 +153,8 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-  // width: 1479px;
   width: 100%;
-  // text-align: center;
 }
-// #app .el-container .el-main
 body {
   background-image: linear-gradient(-90deg, #29bdd9 0%, #276ace 100%);
   // background: linear-gradient(to right, rgb(233, 231, 231) 1px, transparent 1px), linear-gradient(to bottom, rgb(243, 240, 240) 1px, transparent 1px);

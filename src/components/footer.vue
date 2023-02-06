@@ -2,50 +2,36 @@
   <div class="footer">
     <span class="scroll"></span>
     <el-divider></el-divider>
-    <span>法律声明</span>
-    <el-divider direction="vertical"></el-divider>
-    <span>友情链接</span>
-    <el-divider direction="vertical"></el-divider>
-    <span @click="drawer = true">联系我</span>
-    <br />
-    <br />
-    <span class="copyright"><b>版权所有</b> 水煮今生</span>
-    <el-drawer title="联系我" :visible.sync="drawer" direction="btt" :modal="false" size="7%">
-      <p class="info">
-        <i class="el-icon-phone"></i>电话：151****0055<br />
-        <i class="el-icon-message"></i>邮箱：miaolf19@lzu.edu.cn<br />
-      </p>
-    </el-drawer>
+    <p class="copyright">Copyright <a target="_blank" href="https://www.miaomiaomiao.link"> &nbsp;水煮今生&nbsp;</a> <a target="_blank" href="https://beian.miit.gov.cn/">赣ICP备2023000562号</a></p>
   </div>
 </template>
 <script>
-export default {
-  data() {
-    return {
-      drawer: false
-    }
-  }
-}
+export default {}
 </script>
 
 <style lang="less" scoped>
-/deep/ .el-drawer__header {
-  margin-bottom: 0;
+a {
+  color: #ffffff;
+  text-align: center;
+  text-decoration: none;
 }
 .footer {
-  height: 150px;
+  font-family: Microsoft YaHei;
+  height: 70px;
   text-align: center;
   font-size: 16px;
   padding: 0px 100px;
   margin-top: 150px;
   position: relative;
   bottom: 0;
+  // color: #000;
 }
 .footer {
   cursor: pointer;
 }
 .copyright {
-  font-size: 12px;
+  color: #fff;
+  // font-size: 12px;
 }
 .info {
   font-size: 14px;

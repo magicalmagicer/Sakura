@@ -127,9 +127,9 @@ module.exports = {
       }
     }
   },
-  // productionSourceMap: false,
+  productionSourceMap: false,
   configureWebpack: {
-    // devtool: 'cheap-module-source-map',
+    devtool: 'cheap-module-source-map',
     // externals: {
     //   vue: 'Vue',
     //   axios: 'axios',
