@@ -29,11 +29,11 @@
             <div class="clearfix">
               <span>本月用户活跃度排行</span>
             </div>
-            <div class="active_item" v-for="(item,index) in activityList" :key="index">
+            <div class="active_item" v-for="(item, index) in activityList" :key="index">
               <div class="active_title">
                 <!-- <div class="index"></div> -->
-                <div class="active_name">{{index + 1 }}.{{item.nickname}}</div>
-                <div class="activity">{{item.times + '次'}}</div>
+                <div class="active_name">{{ index + 1 }}.{{ item.nickname }}</div>
+                <div class="activity">{{ item.times + '次' }}</div>
               </div>
               <el-progress :stroke-width="18" :percentage="progressData(item.times)" :color="selectColor(index)" :text-inside="true"></el-progress>
             </div>
@@ -51,7 +51,6 @@
             </el-tag>
           </div>
         </el-card>
-
       </div>
     </el-aside>
 
@@ -163,17 +162,16 @@ export default {
   computed: {
     // 渲染文章内容预览
     compiledMarkdown() {
-      return function (text) {
+      return function(text) {
         return marked(text)
       }
     },
     // 计算百分比
     progressData() {
-      return function (num) {
+      return function(num) {
         return (Number(num) / Number(this.first)).toFixed(2) * 100
       }
     }
-
   },
   methods: {
     // 预览图关闭
@@ -265,15 +263,15 @@ export default {
 
       this.first = res.data[0].times
 
-      console.log(this.first);
+      console.log(this.first)
     },
     // 排行榜颜色
     selectColor(index) {
-      const r = Math.floor(Math.random() * 256);
-      const g = Math.floor(Math.random() * 256);
-      const b = Math.floor(Math.random() * 256);
-      const color = `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
-      return color;
+      const r = Math.floor(Math.random() * 256)
+      const g = Math.floor(Math.random() * 256)
+      const b = Math.floor(Math.random() * 256)
+      const color = `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`
+      return color
       // switch (index) {
       //   case 0:
       //     return this.progressColor[index]
@@ -294,10 +292,7 @@ export default {
       //     return this.progressColor[index]
       //     break;
       // }
-    },
-
-
-
+    }
   }
 }
 </script>
@@ -481,11 +476,13 @@ export default {
         }
         /deep/ .el-card__body {
           margin: 0;
+          // max-height: 200px;
           // width: %;
           width: 480px;
           padding-top: 0;
           box-sizing: border-box;
           .text {
+            max-height: 250px;
             overflow: hidden;
             display: -webkit-box;
             word-break: break-all;
@@ -494,6 +491,22 @@ export default {
             -webkit-line-clamp: 5;
             font-size: 14px;
             -webkit-overflow-scrolling: touch;
+            position: relative;
+            img p a {
+              position: absolute;
+            }
+            img {
+              width: auto;
+              height: auto;
+              max-width: 100%;
+              max-height: 100%;
+            }
+            p {
+              width: auto;
+              height: auto;
+              max-width: 100%;
+              max-height: 222px;
+            }
           }
           .hot {
             position: relative;
