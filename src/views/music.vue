@@ -14,7 +14,6 @@
 import WOW from 'wowjs'
 import Banner from '../components/musicBanner.vue'
 import Search from '../components/musicSearch.vue'
-import FooterBar from '../components/musicPlayer.vue'
 export default {
   data() {
     return {

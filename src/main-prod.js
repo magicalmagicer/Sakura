@@ -31,8 +31,8 @@ Vue.use(animated)
 Vue.use(mavonEditor) //让Vue使用mavonEditor
 Vue.prototype.$echarts = echarts //挂载到Vue实例上面
 Vue.config.productionTip = false
-Vue.prototype.$originUrl = 'http://120.46.168.254:3007'
-Vue.prototype.$originUrl2 = 'http://120.46.168.254:3000'
+Vue.prototype.$originUrl = 'http://10.20.55.63:3007'
+Vue.prototype.$originUrl2 = 'http://10.20.55.63:3000'
 // Vue.prototype.$originUrl = 'http://127.0.0.1'
 // Vue.prototype.$originUrl2 = 'http://120.46.168.254:3000'
 new Vue({

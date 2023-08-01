@@ -78,9 +78,7 @@
           <el-image style="width: 100px; height: 80px" ref="preview" @click="onPreview(item.pic_url)" :src="item.pic_url" fit="cover"></el-image>
         </div>
         <!-- 文章内容部分预览 -->
-        <div class="text item" v-html="compiledMarkdown(item.content)">
-          <!-- {{ item.content | convert}} -->
-        </div>
+        <div class="text item" v-html="compiledMarkdown(item.content)"></div>
         <!-- 点赞量 -->
         <p class="hot">
           <span class="el-icon-thumb">点赞({{ item.like_count }})</span>
@@ -401,13 +399,10 @@ export default {
       }
     }
     .el-main {
-      // background: transparent;
-      // background-color: #fff;
       margin: 30px 0;
       padding-left: 155px;
       box-sizing: content-box;
       padding-bottom: 20px;
-      // border-left: 1px dashed rgb(201, 201, 201);
       overflow: unset;
       .search {
         display: flex;

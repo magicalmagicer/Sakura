@@ -151,7 +151,9 @@ export default {
     line-height: 12px;
   }
 }
-
+/deep/ .el-menu-item:hover {
+  color: #000 !important;
+}
 .background {
   border: none;
   background: url('../assets/information.jpg') no-repeat;
@@ -189,14 +191,10 @@ export default {
   border: none;
 }
 .el-aside {
-  // background-color: transparent;
   margin-top: 25px;
-  // height: 230px;
   overflow: visible;
   color: #333;
   text-align: center;
-
-  // line-height: 200px;
 }
 
 body > .el-container {

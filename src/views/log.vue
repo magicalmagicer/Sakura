@@ -167,7 +167,7 @@ export default {
                 }, 1000)
               } else if (this.status === 3) {
                 // 管理员登陆
-                console.log('管理员登陆');
+                console.log('管理员登陆')
                 if (res.data.power >= 2) {
                   this.$message.success(`登录后台管理系统成功，${this.name} 欢迎你！`)
                   setTimeout(() => {
@@ -231,7 +231,7 @@ export default {
   //   this.setTimer()
   // },
   computed: {
-    login_title: function () {
+    login_title: function() {
       return this.status === 1 ? '用户登录' : this.status === 2 ? '用户注册' : '管理员登录'
     }
   }
@@ -260,7 +260,9 @@ export default {
   }
   // margin-bottom: 30px;
   .block {
-    // background-color: white;
+    // background: linear-gradient(150deg, #88baf3, #78d6e8);
+    // background: url('../assets/login_bg.jpg') no-repeat;
+    // background-size: cover;
     // width: 500px;
     // margin: 0 auto;
     // padding: 30px;
@@ -269,9 +271,10 @@ export default {
     text-align: center;
     width: 500px;
     height: 300px;
-    border: 1px solid #2b2b2b;
+    border: 1px solid #877b7b;
+    // box-shadow: 0 0 5px 1px rgba(0, 0, 0/, 0.2);
     border-radius: 6px;
-    box-shadow: 0 0 20px 20px #00000030;
+    box-shadow: 0 0 20px 20px rgba(142, 132, 132, 0.2);
     position: absolute;
     z-index: 1;
     left: 0;
@@ -279,6 +282,7 @@ export default {
     top: 0;
     bottom: 0;
     margin: auto auto;
+
     h3 {
       color: #fff;
       font-family: 'Arial';
@@ -291,16 +295,17 @@ export default {
       margin: auto;
       .el-form-item {
         .el-form-item__label {
+          color: #fff;
           text-align: center;
           font-size: 16px;
           font-weight: 700;
-          color: #2b2b2b;
+          // color: #2b2b2b;
           padding: 0;
         }
       }
     }
     .tip {
-      color: #707070;
+      color: #fff;
       font-size: 14px;
       span {
         color: #409eff;

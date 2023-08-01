@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="title">我的文章</h1
+    <h1 class="title">我的文章</h1>
     <!-- 文章列表 -->
     <el-table :data="myArticle" stripenpm style="width: 100%">
       <el-table-column label="封面">
@@ -43,26 +43,28 @@ export default {
   },
   methods: {
     // 删除文章
-    removeArticle(id){
+    removeArticle(id) {
       this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(async () => {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
           // 确认删除
           // console.log('删除成功');
-          const {data:res} = await this.$http.get(this.$originUrl + '/article/delete',{params:{id:id}}) 
+          const { data: res } = await this.$http.get(this.$originUrl + '/article/delete', { params: { id: id } })
           // console.log(res.data);
           if (res.status !== 0) return this.$message.waring('删除文章失败！')
           this.$message.success('删除文章成功！')
           this.GetAllArticle()
           // location.reload()
-        }).catch(() => {
+        })
+        .catch(() => {
           this.$message({
             type: 'info',
             message: '已取消删除'
-          });          
-        });
+          })
+        })
     },
     // 编辑文章
     editArticle(id) {
@@ -101,7 +103,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.top{
+.top {
   display: flex;
   margin-top: 20px;
   // align-items: center;

@@ -115,12 +115,12 @@ module.exports = {
       // 网易云api
       '/api2': {
         // 匹配所有以 '/api2'开头的请求路径
-        target: 'http://120.46.168.254:3000', // 代理目标的基础路径
+        target: 'http://127.0.0.1:3000', // 代理目标的基础路径
         changeOrigin: true,
         pathRewrite: { '^/api2': '' }
       },
       '/api3': {
-        // 匹配所有以 '/api2'开头的请求路径
+        // 匹配所有以 '/api3'开头的请求路径
         target: 'https://restapi.amap.com/v3/ip?', // 代理目标的基础路径
         changeOrigin: true,
         pathRewrite: { '^/api3': '' }

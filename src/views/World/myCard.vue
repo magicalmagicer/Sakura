@@ -201,10 +201,12 @@ export default {
 </script>
 <style lang="less" scoped>
 .height {
-  margin: 39px 0;
+  margin: 40px 0;
 }
 .father {
   position: relative;
+  // padding: 20px 0px;
+  // box-sizing: border-box;
 }
 .toEditSecret {
   z-index: 3;

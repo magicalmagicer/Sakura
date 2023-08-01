@@ -20,7 +20,7 @@
               <!-- {{ item.nickname ? item.nickname : item.username }} -->
             </div>
             <div class="article">
-              给你的文章 <span>{{ item.title }}</span> 留言:
+              给你的文章 <span>《 {{ item.title }} 》</span> 留言:
             </div>
           </div>
         </div>
@@ -49,11 +49,15 @@
 export default {
   filters: {
     changeShow(time) {
-      if (time) {
-        const a = time.split('T')
-        // const b = time.substring(11, 8)
-        return a[0] + ' ' + a[1].substring(0, 8)
-      } else return ''
+      try {
+        if (time) {
+          const a = time.split(' ')
+          return a[0] + ' ' + a[1].substring(0, 8)
+        }
+        return ''
+      } catch (e) {
+        return ''
+      }
     }
   },
   data() {
@@ -69,12 +73,8 @@ export default {
     //   return this.$store.state.messageStatusChange
     // }
   },
-  watch: {
-    // leaveMessage(newval, oldval) {
-    //   console.log('监听到数据变化')
-    //   console.log(newval)
-    //   console.log(oldval)
-    // }
+  created() {
+    // console.log(this.$store.state.leaveMessage)
   },
   methods: {
     // 跳转文章
@@ -119,6 +119,7 @@ export default {
   color: #999;
   .time {
     margin-right: 10px;
+    color: #fc5531;
   }
   /deep/ .el-button {
     padding: 0;
@@ -146,7 +147,7 @@ export default {
     margin-right: 10px;
   }
   .article {
-    font-size: 13px;
+    font-size: 14px;
     color: #999;
     span {
       color: #222;
@@ -157,10 +158,6 @@ export default {
 .clearfix {
   margin-bottom: 20px;
   font-size: 12px;
-  // span {
-  //   color: #666;
-  //   font-size: 16px;
-  // }
 }
 
 .clearfix:before,
@@ -178,7 +175,7 @@ export default {
   .content {
     position: relative;
     padding: 10px 20px;
-    background-color: #ffffc3;
+    background: linear-gradient(60deg, #edff7f, #fff666);
     border-radius: 10px;
     .unread {
       position: absolute;
