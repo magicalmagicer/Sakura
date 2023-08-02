@@ -185,7 +185,8 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-@import '../assets/less/lessConfig.less';
+// @import '@/assets/less/lessConfig.less';
+// @import '@/assets/less/lessConfig.less';
 
 /* 整体 */
 .player {

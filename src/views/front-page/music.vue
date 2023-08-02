@@ -12,13 +12,13 @@
 
 <script>
 import WOW from 'wowjs'
-import Banner from '../components/musicBanner.vue'
-import Search from '../components/musicSearch.vue'
+import Banner from '@/components/music/musicBanner.vue'
+import Search from '@/components/music/musicSearch.vue'
+// import FooterBar from './'
+
 export default {
   data() {
     return {
-      // count: 0,
-      // bookList: [],
       activePath: '/daily',
       menuList: [
         { path: '/daily', title: '每日推荐', Login: true, type: 1 },
@@ -26,7 +26,7 @@ export default {
       ]
     }
   },
-  components: { Banner, Search, FooterBar },
+  components: { Banner, Search },
   methods: {
     changePath(path) {
       this.activePath = path
@@ -50,7 +50,7 @@ export default {
 
 <style lang="less" scoped>
 .el-main {
-  background: url('../assets/musicbg.webp') no-repeat;
+  background: url('../../assets/musicbg.webp') no-repeat;
   background-size: cover;
 }
 .musicHeader {
@@ -58,17 +58,13 @@ export default {
   font-family: 'cute';
   font-size: 28px;
   color: rgb(255, 255, 0);
-  // color: rgb(231, 27, 100);
 }
 .el-header {
-  // background-color: #b3c0d1;
-  // color: #333;
   text-align: center;
   line-height: 60px;
 }
 
 .el-aside {
-  // background-color: #d3dce6;
   color: #333;
   text-align: center;
   line-height: 200px;
@@ -78,11 +74,9 @@ export default {
   background-color: #e9eef3;
   color: #333;
   text-align: center;
-  // line-height: 160px;
 }
 
 body > .el-container {
-  // margin-top: 40px;
   margin-bottom: 40px;
 }
 </style>

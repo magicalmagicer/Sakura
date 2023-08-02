@@ -3,7 +3,7 @@
     <!-- 头部 -->
     <el-header>
       <div>
-        <img src="../assets/feng.jpg" alt="" class="img" />
+        <img src="@/assets/feng.jpg" alt="" class="img" />
         <span>后台管理系统</span>
       </div>
       <el-button type="info" @click="logout">退出</el-button>
@@ -40,7 +40,6 @@
 
 <script>
 export default {
-  name: 'Home',
   created() {
     // this.getMenuList()
     this.activePath = '/users'
@@ -52,7 +51,15 @@ export default {
       activePath: '',
       // 左侧菜单数据
       menuList: [
-        { id: 1, name: '用户管理', path: 'users', children: [{ id: 10, name: '用户列表', path: 'users' }, { id: 11, name: '登录信息', path: 'status' }] },
+        {
+          id: 1,
+          name: '用户管理',
+          path: 'users',
+          children: [
+            { id: 10, name: '用户列表', path: 'users' },
+            { id: 11, name: '登录信息', path: 'status' }
+          ]
+        },
         // {
         //   id: 2,
         //   name: '权限管理',
@@ -68,7 +75,7 @@ export default {
           path: 'articles',
           children: [
             { id: 30, name: '文章列表', path: 'articles' },
-            { id: 31, name: '文章分类', path: 'category' },
+            { id: 31, name: '文章分类', path: 'category' }
           ]
         }
       ],
@@ -87,7 +94,7 @@ export default {
     },
     logout() {
       window.sessionStorage.clear()
-      this.$router.push('/log')
+      this.$router.push('/login')
     },
     async getMenuList() {
       const { data: res } = await this.$http.get('menus')

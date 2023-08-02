@@ -113,7 +113,6 @@ marked.setOptions({
 export default {
   components: {
     elImageViewer: ElImageViewer
-    // FooterBar
   },
 
   data() {
@@ -225,7 +224,7 @@ export default {
         var { data: res } = await this.$http.get(this.$originUrl + '/article/get', { params: { key: this.key, curPage: this.currentPage, pageSize: this.pageSize } })
       }
       if (res.status === 1) {
-        if (res.message === '身份认证失败！') this.$router.push('/Log')
+        if (res.message === '身份认证失败！') this.$router.push('/login')
         return
       }
       this.AllArticle = res.data

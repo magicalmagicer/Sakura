@@ -89,7 +89,7 @@ export default {
       commentArray: [],
       isEmpty: false,
       username: Cookie.get('username'),
-      defaultImgUrl: '../assets/user.png',
+      defaultImgUrl: '@/assets/user.png',
       showReplyBox: 0
     }
   },
@@ -211,7 +211,7 @@ export default {
           type: 'warning'
         })
         setTimeout(() => {
-          this.$router.push({ name: 'Log' })
+          this.$router.push({ path: '/login' })
         }, 2000)
       }
     }

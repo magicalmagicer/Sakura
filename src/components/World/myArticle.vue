@@ -75,7 +75,7 @@ export default {
       const { data: res } = await this.$http.get(this.$originUrl + '/article/get', { params: { curPage: this.currentPage, pageSize: this.pageSize, id: Cookie.get('user_id') } })
       if (res.status === 1) {
         this.$message.error('获取文章列表失败！')
-        if (res.message === '身份认证失败！') this.$router.push('/Log')
+        if (res.message === '身份认证失败！') this.$router.push('/login')
         return
       }
       this.myArticle = res.data

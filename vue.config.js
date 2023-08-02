@@ -1,7 +1,13 @@
 const CompressionPlugin = require('compression-webpack-plugin')
 const webpack = require('webpack')
+const path = require('path')
+function resolve (dir) {
+  return path.join(__dirname, dir)
+}
+
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
+
   chainWebpack: config => {
     // config.plugins.delete('prefetch')
     // 修改标题
@@ -129,7 +135,7 @@ module.exports = {
   },
   productionSourceMap: false,
   configureWebpack: {
-    devtool: 'cheap-module-source-map',
+    devtool: 'eval-source-map',
     // externals: {
     //   vue: 'Vue',
     //   axios: 'axios',
@@ -137,6 +143,11 @@ module.exports = {
     //   'vue-router': 'VueRouter',
     //   vuex: 'Vuex'
     // },
+    resolve: {
+      alias: {
+        '@': resolve('src') //使用 @/ 的引用都会直接指向 src 目录
+      }
+    },
     plugins: [
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       // 下面两项配置才是 compression-webpack-plugin 压缩配置

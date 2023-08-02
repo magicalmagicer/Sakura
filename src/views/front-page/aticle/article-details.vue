@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import articleContents from '../components/articleContents.vue'
-import comment from '../components/comment.vue'
+import articleContents from './article-content.vue'
+import comment from './article-comment.vue'
 import Cookie from 'js-cookie'
 
 export default {
@@ -91,7 +91,7 @@ export default {
           type: 'warning'
         })
         setTimeout(() => {
-          this.$router.push({ name: 'Log' })
+          this.$router.push({ path: '/login' })
         }, 3000)
       }
     },

@@ -156,7 +156,7 @@ export default {
 }
 .background {
   border: none;
-  background: url('../assets/information.jpg') no-repeat;
+  background: url('../../assets/information.jpg') no-repeat;
   background-size: cover;
 }
 /deep/ .el-menu-item-group__title {

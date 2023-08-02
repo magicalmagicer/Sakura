@@ -16,7 +16,7 @@
     margin: auto;
     height: 580px;
     width: 100%;
-    background: url('../assets/sakura.jpg') center / cover no-repeat;
+    background: url('../../assets/sakura.jpg') center / cover no-repeat;
     .headImg {
       // width: 120px;
       display: flex;

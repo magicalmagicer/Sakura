@@ -2,7 +2,7 @@
   <div class="w">
     <!-- 导航栏 -->
     <el-menu id="header" :default-active="$route.path" class="header-container" mode="horizontal" active-text-color="rgb(219, 165, 183)" router v-show="editorFullScreen">
-      <el-menu-item index="/index">首页</el-menu-item>
+      <el-menu-item index="/home">首页</el-menu-item>
       <el-menu-item index="/music">听歌</el-menu-item>
       <el-menu-item index="/write">写文章</el-menu-item>
       <el-menu-item index="/about">关于我</el-menu-item>
@@ -36,10 +36,10 @@
 
 <script>
 import WOW from 'wowjs'
-import Footer from '../components/footer.vue'
-import banner from '../components/banner.vue'
+import Footer from '@/components/front-page/footer.vue'
+import banner from '@/components/front-page/banner.vue'
 import Cookie from 'js-cookie'
-import FooterBar from '@/components/musicPlayer.vue'
+import FooterBar from '@/components/music/musicPlayer.vue'
 export default {
   components: {
     Footer,
@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       userAvatar: '',
-      userImg: require('../assets/user.png'),
+      userImg: require('@/assets/user.png'),
       activeIndex: '/',
       username: Cookie.get('username'),
       oldScrollTop: 0
@@ -91,7 +91,7 @@ export default {
       Cookie.remove('username')
       // 清除sessionStorage
       sessionStorage.clear()
-      this.$router.push({ path: '/log' })
+      this.$router.push({ path: '/login' })
       // 修改vuex的登录状态
       this.$store.commit('changIsSignIn', 0)
       // // 修改vuex的token
@@ -109,7 +109,7 @@ export default {
       this.$router.push(`/myworld/${Cookie.get('user_id')}`)
     },
     handleSelect(key, keyPath) {
-      if (key === '/log') {
+      if (key === '/login') {
         this.exit()
       }
     },

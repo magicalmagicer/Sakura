@@ -1,7 +1,7 @@
 <template>
   <div class="about wow slideInLeft">
     <div class="headerImg">
-      <img src="../assets/about.jpg" alt="" />
+      <img src="@/assets/about.jpg" alt="" />
     </div>
     <h1 class="aboutMe">About Me</h1>
     <el-divider><i class="el-icon-s-check"></i></el-divider>
@@ -9,7 +9,7 @@
       <div class="info">
         <h1>📝 个人信息</h1>
         <li class="name">愿风裁尘</li>
-        <li>大三在读，现居甘肃</li>
+        <li>菜鸡一枚，现居深圳</li>
         <li>在路上的前端学习者</li>
         <li>希望能和大家一同进步~</li>
       </div>

@@ -3,9 +3,10 @@
     <div class="loginbg">
       <img :src="imgUrl" ref="img" />
     </div>
-    <div class="block" v-if="$store.state.isSignIn == 0">
+    <router-view></router-view>
+    <!-- <LoginBox></LoginBox> -->
+    <!-- <div class="block" v-if="$store.state.isSignIn == 0">
       <h3>{{ login_title }}</h3>
-      <!-- 登录表单 -->
       <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-position="right" @keyup.enter.native="submitForm">
         <el-form-item label="用户名" prop="username" label-width="80px">
           <el-input prefix-icon="el-icon-user-solid" v-model.trim()="ruleForm.username"></el-input>
@@ -21,10 +22,6 @@
         </el-form-item>
 
         <el-form-item style="margin-right: 100px; margin-top: 30px">
-          <!-- <el-button type="primary" @click="submitForm()" v-if="status == 1 || 3">登录</el-button>
-          <el-button type="primary" @click="register()" v-if="status == 2">注册</el-button>
-          <el-button @click="resetForm('ruleForm')" v-if="status == 1 || 3">重置</el-button>
-          <el-button @click="resetForm('ruleForm')" v-if="status == 2">重置</el-button> -->
           <el-button type="primary" @click="submitForm()" v-if="status !== 2">登录</el-button>
           <el-button type="primary" @click="register()" v-if="status == 2">注册</el-button>
           <el-button @click="resetForm()">重置</el-button>
@@ -34,13 +31,15 @@
       <span class="tip sign" style="color: #409eff; padding-left: 20px" v-if="status == 1" @click="toAdmin">管理员登录</span>
       <span class="tip" v-if="status == 2">已有账号？去<span class="sign" @click="toLogin">登录</span></span>
       <span class="tip sign white" v-if="status == 3" @click="toLogin">返回</span>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
 import Cookie from 'js-cookie'
+import LoginBox from '@/components/register-login-component/login.vue'
 
 export default {
+  components: { LoginBox },
   filters: {
     name(str) {
       if (str) return str.substring(0, 1)
@@ -62,7 +61,7 @@ export default {
       // 背景定时切换
       img_index: 1,
       timer: null,
-      imgUrl: require('../assets/1.jpg'),
+      imgUrl: require('@/assets/1.jpg'),
       imageUrl: '',
       nickname: '',
       status: 1,
@@ -100,16 +99,12 @@ export default {
   methods: {
     // 定时器轮播背景图
     setTimer() {
-      // clearInterval(this.timer)
       this.timer = setInterval(() => {
-        // this.$nextTick(() => {
-        // this.$refs.img.style.opacity = 1
         this.img_index = this.img_index < 3 ? this.img_index + 1 : 1
-        this.imgUrl = require(`../assets/${this.img_index}.jpg`)
+        this.imgUrl = require(`@/assets/${this.img_index}.jpg`)
         setTimeout(() => {
           // this.$refs.img.style.opacity = 0.8
         }, 4000)
-        // })
       }, 5000)
     },
 
@@ -163,7 +158,7 @@ export default {
               if (this.status === 1) {
                 this.$message.success(`登录成功，${this.name} 欢迎你！`)
                 setTimeout(() => {
-                  this.$router.push({ name: 'Index' })
+                  this.$router.push({ path: '/home' })
                 }, 1000)
               } else if (this.status === 3) {
                 // 管理员登陆
@@ -258,21 +253,11 @@ export default {
   .white {
     color: #fff !important;
   }
-  // margin-bottom: 30px;
   .block {
-    // background: linear-gradient(150deg, #88baf3, #78d6e8);
-    // background: url('../assets/login_bg.jpg') no-repeat;
-    // background-size: cover;
-    // width: 500px;
-    // margin: 0 auto;
-    // padding: 30px;
-    // border: 1px solid #dbdcdf;
-    // border-radius: 10px;
     text-align: center;
     width: 500px;
     height: 300px;
     border: 1px solid #877b7b;
-    // box-shadow: 0 0 5px 1px rgba(0, 0, 0/, 0.2);
     border-radius: 6px;
     box-shadow: 0 0 20px 20px rgba(142, 132, 132, 0.2);
     position: absolute;
