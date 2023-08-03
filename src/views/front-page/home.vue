@@ -224,7 +224,7 @@ export default {
         var { data: res } = await this.$http.get(this.$originUrl + '/article/get', { params: { key: this.key, curPage: this.currentPage, pageSize: this.pageSize } })
       }
       if (res.status === 1) {
-        if (res.message === '身份认证失败！') this.$router.push('/login')
+        if (res.message === '身份认证失败！') this.$router.push('/entrance')
         return
       }
       this.AllArticle = res.data

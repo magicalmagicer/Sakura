@@ -154,6 +154,7 @@ export default {
   bottom: 0;
   left: 0;
   width: 100%;
+  // overflow: hidden;
 }
 body {
   background-image: linear-gradient(-90deg, #29bdd9 0%, #276ace 100%);

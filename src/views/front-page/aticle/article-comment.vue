@@ -211,7 +211,7 @@ export default {
           type: 'warning'
         })
         setTimeout(() => {
-          this.$router.push({ path: '/login' })
+          this.$router.push({ path: '/entrance' })
         }, 2000)
       }
     }

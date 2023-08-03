@@ -91,7 +91,7 @@ export default {
       Cookie.remove('username')
       // 清除sessionStorage
       sessionStorage.clear()
-      this.$router.push({ path: '/login' })
+      this.$router.push({ path: '/entrance' })
       // 修改vuex的登录状态
       this.$store.commit('changIsSignIn', 0)
       // // 修改vuex的token
@@ -109,7 +109,7 @@ export default {
       this.$router.push(`/myworld/${Cookie.get('user_id')}`)
     },
     handleSelect(key, keyPath) {
-      if (key === '/login') {
+      if (key === '/entrance') {
         this.exit()
       }
     },

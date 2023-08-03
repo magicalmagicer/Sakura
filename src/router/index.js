@@ -11,13 +11,13 @@ const routes = [
     path: '/entrance',
     name: 'Entrance',
     component: () => import('@/views/entrance.vue'),
-    redirect: '/login',
-    children: [
-      {
-        path: '/login',
-        component: () => import('@/components/register-login-component/login.vue')
-      }
-    ]
+    // redirect: '/login',
+    // children: [
+    //   {
+    //     path: '/login',
+    //     component: () => import('@/components/register-login-component/login.vue')
+    //   }
+    // ]
   },
 
   // 登录后
@@ -132,10 +132,10 @@ router.beforeEach((to, from, next) => {
     next()
   } else {
     // 未登录则去登录
-    if (to.path === '/login') {
+    if (to.path === '/entrance') {
       next()
     } else {
-      next({ path: '/login' })
+      next({ path: '/entrance' })
     }
   }
 })

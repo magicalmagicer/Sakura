@@ -2,14 +2,12 @@
   <div class="block">
     <h3>用户登录</h3>
     <!-- 登录表单 -->
-    <el-form :model="ruleForm" status-icon :rules="rules" label-width="100px" class="demo-ruleForm" label-position="right" @keyup.enter.native="submitForm">
+    <el-form :model="userinfo" ref="userinfo" status-icon :rules="rules" label-width="100px" class="demo-userinfo" label-position="right" @keyup.enter.native="submitForm">
       <el-form-item label="用户名" prop="username" label-width="80px">
-        <!-- <el-input :value="ruleForm.username" prefix-icon="el-icon-user-solid" @input="changeUsername"></el-input> -->
-        <el-input prefix-icon="el-icon-user-solid" v-model.trim()="ruleForm.username" @input="changeUsername"></el-input>
-        <!-- <input type="text" :value="ruleForm.username" οnkeyup="value=value.replace(/[^\w\.\/]/ig,'')" /> -->
+        <el-input prefix-icon="el-icon-user-solid" v-model="userinfo.username"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password" label-width="80px">
-        <el-input type="password" prefix-icon="el-icon-lock" ref="password" @input="changePassword($event)" :value="ruleForm.password"></el-input>
+        <el-input type="password" prefix-icon="el-icon-lock" ref="password" v-model="userinfo.password"></el-input>
       </el-form-item>
       <el-form-item style="margin-right: 100px; margin-top: 30px">
         <el-button type="primary" @click="submitForm()">登录</el-button>
@@ -24,32 +22,10 @@
 import Cookie from 'js-cookie'
 
 export default {
-  filters: {
-    name(str) {
-      if (str) return str.substring(0, 1)
-      else return ''
-    }
-  },
   data() {
-    var validatePass2 = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'))
-      } else if (value !== this.ruleForm.password) {
-        callback(new Error('两次输入密码不一致!'))
-      } else {
-        callback()
-      }
-    }
     return {
-      name: '',
-      // 背景定时切换
-      img_index: 1,
-      timer: null,
-      imgUrl: require('@/assets/1.jpg'),
-      imageUrl: '',
-      nickname: '',
       // 用户数据表
-      ruleForm: {
+      userinfo: {
         username: '',
         password: ''
       },
@@ -70,57 +46,38 @@ export default {
     // 提交登录
     submitForm() {
       if (this.$refs.password.value.trim() == '') {
-        console.log('111111111')
         this.$refs.password.focus()
       } else {
-        console.log('222')
-        this.$refs.ruleForm.validate(async valid => {
+        this.$refs.userinfo.validate(async valid => {
           if (valid) {
             let data = this.$qs.stringify({
-              username: this.ruleForm.username,
-              password: this.ruleForm.password
+              username: this.userinfo.username,
+              password: this.userinfo.password
             })
 
             let res = await this.$http.post(this.$originUrl + '/api/users/login', data)
             if (res.data.status === 1) {
               return this.$message.error(res.data.message)
-            } else {
-              // 修改vuex的登录状态
-              this.$store.commit('changIsSignIn', 1)
-              // 设置cookie
-              Cookie.set('token', res.data.token)
-              Cookie.set('username', this.ruleForm.username)
-              Cookie.set('user_id', res.data.id)
-              Cookie.set('user_power', res.data.power)
-
-              // 修改vuex的token
-              this.$store.commit('setToken', res.data.token)
-              this.$store.commit('setUsername', res.data.username)
-              this.$store.commit('setId', res.data.id)
-              if (res.data.nickname) {
-                this.name = res.data.nickname
-              } else {
-                this.name = res.data.username
-              }
-              // 普通登录
-              if (this.status === 1) {
-                this.$message.success(`登录成功，${this.name} 欢迎你！`)
-                setTimeout(() => {
-                  this.$router.push({ path: '/home' })
-                }, 1000)
-              } else if (this.status === 3) {
-                // 管理员登陆
-                console.log('管理员登陆')
-                if (res.data.power >= 2) {
-                  this.$message.success(`登录后台管理系统成功，${this.name} 欢迎你！`)
-                  setTimeout(() => {
-                    this.$router.push('/backstage')
-                  }, 1000)
-                } else {
-                  return this.$message.warning('您不是管理员，无法登录！')
-                }
-              }
             }
+            // 修改vuex的登录状态
+            this.$store.commit('changIsSignIn', 1)
+            // 设置cookie
+            Cookie.set('token', res.data.token)
+            Cookie.set('username', this.userinfo.username)
+            Cookie.set('user_id', res.data.id)
+            Cookie.set('user_power', res.data.power)
+
+            // 修改vuex的token
+            this.$store.commit('setToken', res.data.token)
+            this.$store.commit('setUsername', res.data.username)
+            this.$store.commit('setId', res.data.id)
+            this.name = res.data.nickname || res.data.username
+
+            // 普通登录
+            this.$message.success(`登录成功，${this.name} 欢迎你！`)
+            setTimeout(() => {
+              this.$router.push({ path: '/home' })
+            }, 1000)
           } else {
             this.$message.error('用户名或者密码不合法！')
             return false
@@ -129,26 +86,19 @@ export default {
       }
     },
     resetForm() {
-      // this.$refs.ruleForm.resetFields()
+      this.$refs.userinfo.resetFields()
     },
-    changeUsername(e) {
-      // this.$set(this.ruleForm, 'username', e)
-      // console.log(e)
-      // this.ruleForm.username = e
-      // console.log(this.ruleForm.username)
-      this.$forceUpdate()
+    toSign() {
+      this.$emit('changeLoginStatus', 2)
     },
-    changePassword(e) {
-      this.ruleForm.password = e
+    toAdmin() {
+      this.$emit('changeLoginStatus', 3)
     }
-  },
-  created() {
-    // this.$store.commit('changIsSignIn', 0)
   }
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 #log {
   margin: auto;
   .loginbg {

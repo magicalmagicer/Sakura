@@ -94,7 +94,7 @@ export default {
     },
     logout() {
       window.sessionStorage.clear()
-      this.$router.push('/login')
+      this.$router.push('/entrance')
     },
     async getMenuList() {
       const { data: res } = await this.$http.get('menus')
