@@ -9,7 +9,6 @@
   </div>
 </template>
 <script>
-import Cookie from 'js-cookie'
 import LoginBox from '@/components/register-login-component/login.vue'
 import AdminLoignBox from '@/components/register-login-component/admin-login.vue'
 import RegisterBox from '@/components/register-login-component/register.vue'
@@ -40,7 +39,7 @@ export default {
       imgUrl: require('@/assets/1.jpg'),
       imageUrl: '',
       nickname: '',
-      status: 2,
+      status: 1,
       // 用户数据表
       ruleForm: {
         username: '',

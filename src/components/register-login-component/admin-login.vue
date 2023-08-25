@@ -231,4 +231,9 @@ export default {
     display: flex;
   }
 }
+.demo-userinfo {
+  /deep/ .el-form-item__label {
+    color: #fff;
+  }
+}
 </style>

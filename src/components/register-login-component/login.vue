@@ -122,7 +122,7 @@ export default {
     text-align: center;
     width: 500px;
     height: 300px;
-    border: 1px solid #877b7b;
+    border: 1px solid rgba(172, 172, 255, .8);
     border-radius: 6px;
     box-shadow: 0 0 20px 20px rgba(142, 132, 132, 0.2);
     position: absolute;
@@ -196,6 +196,11 @@ export default {
   }
   .btn {
     display: flex;
+  }
+}
+.demo-userinfo {
+  /deep/ .el-form-item__label {
+    color: #fff;
   }
 }
 </style>

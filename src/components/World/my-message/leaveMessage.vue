@@ -170,7 +170,7 @@ export default {
 }
 
 .box-card {
-  width: 560px;
+  width: 680px;
   margin: 0 auto;
   .content {
     position: relative;

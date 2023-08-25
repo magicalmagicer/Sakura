@@ -6,7 +6,7 @@
     <el-main>
       <div class="editor">
         <el-form :model="articleForm" label-width="5vw" :rules="rules">
-          <el-form-item prop="title">
+          <el-form-item prop="title" class="title">
             <span slot="label">
               <span class="label">标题</span>
             </span>
@@ -206,5 +206,10 @@ export default {
 .label {
   color: #fff !important;
   font-size: 16px !important;
+}
+.title {
+  /deep/ .el-input__inner {
+    width: 60%;
+  }
 }
 </style>

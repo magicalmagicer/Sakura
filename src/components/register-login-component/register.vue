@@ -17,11 +17,13 @@
       </el-form-item>
       <!-- 邮箱验证 -->
       <el-form-item label="邮箱" prop="email" label-width="80px">
-        <el-input type="email" v-model="userinfo.email" prefix-icon="el-icon-message" ref="password"></el-input>
+        <el-input type="email" v-model="userinfo.email" prefix-icon="el-icon-message"></el-input>
       </el-form-item>
       <el-form-item label-width="80px" label="验证码" prop="code" class="code">
         <el-input v-model="userinfo.code" autocomplete="off" suffix="获取验证码"></el-input>
-        <el-button class="get-code" :type="disabled ? 'info' : 'success'" size="mini" :disabled="disabled" @click="getCode">{{ disabled ? '已发送 ' + countdown : '获取验证码' }}</el-button>
+        <el-button class="get-code" :type="disabled ? 'info' : 'success'" size="mini" :disabled="disabled" @click="getCode">{{
+          disabled ? '已发送 ' + countdown : '获取验证码'
+        }}</el-button>
       </el-form-item>
 
       <el-form-item style="margin-right: 100px; margin-top: 30px">
@@ -33,19 +35,27 @@
   </div>
 </template>
 <script>
-import Cookie from 'js-cookie'
 
 export default {
   data() {
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请再次输入密码'))
+        callback(new Error('请再次输入密码'));
       } else if (value !== this.userinfo.password) {
-        callback(new Error('两次输入密码不一致!'))
+        callback(new Error('两次输入密码不一致!'));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
+    var checkEmail = (rule, value, callback) => {
+      //验证邮箱
+      const regEmail = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+      if (value === '' || !regEmail.test(value)) {
+        callback(new Error('请输入有效的邮箱'));
+      } else {
+        callback();
+      }
+    };
     return {
       name: '',
       // 背景定时切换
@@ -61,8 +71,8 @@ export default {
         nickname: '',
         password: '',
         checkPass: '',
-        emial: '',
-        code: ''
+        email: '',
+        code: '',
       },
       disabled: false,
       timer: null,
@@ -70,89 +80,86 @@ export default {
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 3, max: 12, message: '长度在 3 到 12 个字符', trigger: 'blur' }
+          { min: 3, max: 12, message: '长度在 3 到 12 个字符', trigger: 'blur' },
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur' }
+          { min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur' },
         ],
         checkPass: [{ validator: validatePass2, trigger: 'blur' }],
         email: [
-          { required: true, message: '请输入邮箱号', trigger: 'blur' },
-          {
-            type: 'email',
-            message: '请输入正确的邮箱地址',
-            trigger: 'blur'
-          }
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+          { validator: checkEmail, trigger: 'blur' },
         ],
-        code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
-      }
-    }
+        code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
+      },
+    };
   },
   methods: {
     // 跳转到登录
     toLogin() {
-      this.$emit('changeLoginStatus', 1)
+      this.$emit('changeLoginStatus', 1);
     },
 
     // 提交注册
     register() {
-      this.$refs.userinfo.validate(async valid => {
+      this.$refs.userinfo.validate(async (valid) => {
         if (valid) {
           let data = this.$qs.stringify({
             username: this.userinfo.username,
             password: this.userinfo.password,
-            nickname: this.userinfo.nickname
-          })
-          const { data: res } = await this.$http.post(this.$originUrl + '/api/users/register', data)
+            nickname: this.userinfo.nickname,
+            email: this.userinfo.email,
+            code: this.userinfo.code,
+          });
+          const { data: res } = await this.$http.post(this.$originUrl + '/api/users/register', data);
           if (res.status === 1) {
-            return this.$message.error('用户注册失败,请重试！')
+            return this.$message.error(res.message);
           }
-          this.status = 1
-          this.$message.success('用户注册成功！')
+          this.status = 1;
+          this.$message.success('用户注册成功！');
+          this.toLogin();
         } else {
-          this.$message.error('用户名或者密码不合法！')
-          return false
+          this.$message.error('用户名或者密码不合法！');
+          return false;
         }
-      })
+      });
     },
     resetForm() {
-      this.$refs.userinfo.resetFields()
+      this.$refs.userinfo.resetFields();
     },
     countDown() {
       this.timer = setInterval(() => {
-        this.countdown--
+        this.countdown--;
         if (this.countdown === 0) {
-          console.log('清除定时器')
-          clearInterval(this.timer)
-          // this.timer = null
-          console.log('清除定时器')
-          this.disabled = false
-          console.log(this.disabled)
+          clearInterval(this.timer);
+          this.disabled = false;
         }
-      }, 1000)
+      }, 1000);
     },
     //获取验证码
-    async getCode() {
-      this.$refs.userinfo.validate('email', async valid => {
-        if (valid) {
+    getCode() {
+      this.$refs.userinfo.validateField('email', async (valid) => {
+        if (valid === '') {
           let data = this.$qs.stringify({
-            email: this.userinfo.email
-          })
-          const { data: res } = await this.$http.post(this.$originUrl + '/api/users/getcode', data)
+            email: this.userinfo.email,
+            type: 1,
+          });
+          console.log(data);
+          const { data: res } = await this.$http.post(this.$originUrl + '/api/users/getcode', data);
           if (res.status === 1) {
-            return this.$message.error('验证码获取失败,请重试！')
+            return this.$message.error('验证码获取失败,请重试！');
           }
-          this.$message.success('验证码发送成功！')
-          this.disabled = true
-          this.countDown()
+          this.$message.success('验证码发送成功！');
+          this.disabled = true;
+          this.countDown();
         } else {
-          return this.$message.error('邮箱格式错误！')
+          return this.$message.error('邮箱格式错误！');
         }
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
@@ -160,7 +167,7 @@ export default {
   text-align: center;
   width: 500px;
   height: 500px;
-  border: 1px solid #877b7b;
+  border: 1px solid rgba(172, 172, 255, .8);
   border-radius: 6px;
   box-shadow: 0 0 20px 20px rgba(142, 132, 132, 0.2);
   position: absolute;
