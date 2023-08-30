@@ -57,8 +57,8 @@
     <!-- 中间主要内容 -->
     <el-main class="wow slideInRight">
       <!-- 搜索框 -->
-      <div class="search">
-        <el-input size="medium" placeholder="请输入文章名进行搜索" v-model="input" debounce @keyup.enter.native="search" clearable> </el-input>
+      <div id="search">
+        <el-input size="medium" placeholder="请输入文章名进行搜索" v-model.trim="input" debounce @keyup.enter.native="search" clearable > </el-input>
         <el-button type="primary" size="mini" @click="search">搜索</el-button>
       </div>
 
@@ -96,10 +96,10 @@
 </template>
 
 <script>
-import WOW from 'wowjs'
-import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
-import { marked } from 'marked'
-var rendererMD = new marked.Renderer()
+import WOW from 'wowjs';
+import ElImageViewer from 'element-ui/packages/image/src/image-viewer';
+import { marked } from 'marked';
+var rendererMD = new marked.Renderer();
 marked.setOptions({
   renderer: rendererMD,
   gfm: true,
@@ -107,12 +107,12 @@ marked.setOptions({
   breaks: false,
   pedantic: false,
   smartLists: true,
-  smartypants: false
-})
+  smartypants: false,
+});
 
 export default {
   components: {
-    elImageViewer: ElImageViewer
+    elImageViewer: ElImageViewer,
   },
 
   data() {
@@ -138,12 +138,13 @@ export default {
       key: '',
       activityList: [],
       progressColor: ['#1bf8f3', '#3196e8', '#feb046', '#e8484f', '#9174e4'],
-      first: 0
-    }
+      first: 0,
+    };
   },
   created() {
-    this.getUserActivity()
-    this.GetAllArticle(this.currentPage, this.pageSize)
+    console.log('进入文章首页');
+    this.getUserActivity();
+    this.GetAllArticle();
   },
   mounted() {
     let wow = new WOW.WOW({
@@ -151,124 +152,129 @@ export default {
       animateClass: 'animated',
       offset: 0,
       mobile: true,
-      live: false
-    })
-    wow.init()
-    this.runtime()
+      live: false,
+    });
+    wow.init();
+    this.runtime();
   },
   computed: {
     // 渲染文章内容预览
     compiledMarkdown() {
-      return function(text) {
-        return marked(text)
-      }
+      return function (text) {
+        return marked(text);
+      };
     },
     // 计算百分比
     progressData() {
-      return function(num) {
-        return (Number(num) / Number(this.first)).toFixed(2) * 100
-      }
-    }
+      return function (num) {
+        return (Number(num) / Number(this.first)).toFixed(2) * 100;
+      };
+    },
   },
   methods: {
     // 预览图关闭
     closeViewer() {
-      this.imgViewerVisible = false
+      this.imgViewerVisible = false;
     },
     onPreview(picUrl) {
       // console.log(picUrl)
-      this.picList = [picUrl]
+      this.picList = [picUrl];
       // this.$refs.preview.clickHandler()
-      this.imgViewerVisible = true
+      this.imgViewerVisible = true;
     },
     // 博客运行时间
     runtime() {
       // 初始时间，日/月/年 时:分:秒
-      const start = new Date('2022/4/19 0:00:00')
-      let nowTime = new Date()
-      let difference = nowTime.getTime() - start.getTime()
-      let oneDaysecond = 24 * 60 * 60 * 1000
-      let d = difference / oneDaysecond // 时间差 / 一天的毫秒数  = 天数
-      this.day = Math.floor(d) //获取天数（向下取整）
+      const start = new Date('2022/4/19 0:00:00');
+      let nowTime = new Date();
+      let difference = nowTime.getTime() - start.getTime();
+      let oneDaysecond = 24 * 60 * 60 * 1000;
+      let d = difference / oneDaysecond; // 时间差 / 一天的毫秒数  = 天数
+      this.day = Math.floor(d); //获取天数（向下取整）
     },
     // 搜索文章
     async search() {
       const { data: res } = await this.$http.get(this.$originUrl + '/article/search', {
-        params: { key: this.input, curPage: this.currentPage, pageSize: this.pageSize }
-      })
-      if (res.status === 1) return this.$message.error('搜索文章失败！')
-      this.AllArticle = res.data
-      this.count = res.count
-      this.AllArticle.map(item => {
-        item.create_time = item.time.slice(0, 10)
-      })
+        params: { key: this.input, curPage: this.currentPage, pageSize: this.pageSize },
+      });
+      if (res.status === 1) return this.$message.error('搜索文章失败！');
+      this.AllArticle = res.data;
+      this.count = res.count;
+      this.AllArticle.map((item) => {
+        item.create_time = item.time.slice(0, 10);
+      });
       // this.GetAllArticleClassName()
     },
     // 当前页变化
     indexChange(index) {
-      this.GetAllArticle(index, this.pageSize)
+      this.currentPage = index;
+      if (this.input) {
+        this.search();
+      } else {
+        this.GetAllArticle();
+      }
     },
     // 点击标签筛选
     tagEvent(classname) {
-      this.key = classname
-      console.log(this.key)
-      this.GetAllArticle()
+      this.key = classname;
+      // console.log(this.key);
+      this.GetAllArticle();
     },
     // 获取文章
     async GetAllArticle() {
       // 获取全部文章
       if (!this.key) {
-        var { data: res } = await this.$http.get(this.$originUrl + '/article/get', { params: { curPage: this.currentPage, pageSize: this.pageSize } })
+        var { data: res } = await this.$http.get(this.$originUrl + '/article/get', { params: { curPage: this.currentPage, pageSize: this.pageSize } });
       } else {
         // 根据标签获取文章
-        var { data: res } = await this.$http.get(this.$originUrl + '/article/get', { params: { key: this.key, curPage: this.currentPage, pageSize: this.pageSize } })
+        var { data: res } = await this.$http.get(this.$originUrl + '/article/get', { params: { key: this.key, curPage: this.currentPage, pageSize: this.pageSize } });
       }
       if (res.status === 1) {
-        if (res.message === '身份认证失败！') this.$router.push('/entrance')
-        return
+        if (res.message === '身份认证失败！') this.$router.push('/entrance');
+        return;
       }
-      this.AllArticle = res.data
-      this.count = res.count
-      this.$store.commit('setCount', this.count)
+      this.AllArticle = res.data;
+      this.count = res.count;
+      this.$store.commit('setCount', this.count);
       // 截取时间
-      this.AllArticle.map(item => {
-        item.create_time = item.time.slice(0, 10)
-      })
-      this.GetAllArticleClassName()
+      this.AllArticle.map((item) => {
+        item.create_time = item.time.slice(0, 10);
+      });
+      this.GetAllArticleClassName();
     },
 
     // 获取全部文章标签
     async GetAllArticleClassName() {
-      const { data: res } = await this.$http.get(this.$originUrl + '/article/cates')
-      this.AllArticleClassName = res.data
-      this.tagCount = this.AllArticleClassName.length
-      this.$store.commit('setTagCount', this.tagCount)
+      const { data: res } = await this.$http.get(this.$originUrl + '/article/cates');
+      this.AllArticleClassName = res.data;
+      this.tagCount = this.AllArticleClassName.length;
+      this.$store.commit('setTagCount', this.tagCount);
     },
     // 获取用户活跃度
     async getUserActivity() {
-      let time = new Date().toLocaleDateString().split('/')
-      let month = time[1].length > 1 ? time[1] : '0' + time[1]
-      let date = time[0] + '-' + month
+      let time = new Date().toLocaleDateString().split('/');
+      let month = time[1].length > 1 ? time[1] : '0' + time[1];
+      let date = time[0] + '-' + month;
       // console.log(date);
       const { data: res } = await this.$http.get(this.$originUrl + '/my/activity', {
         params: {
-          date
-        }
-      })
-      if (res.status !== 0) return
-      this.activityList = res.data
+          date,
+        },
+      });
+      if (res.status !== 0) return;
+      this.activityList = res.data;
 
-      this.first = res.data[0].times
+      this.first = res.data[0].times;
 
-      console.log(this.first)
+      console.log(this.first);
     },
     // 排行榜颜色
     selectColor(index) {
-      const r = Math.floor(Math.random() * 256)
-      const g = Math.floor(Math.random() * 256)
-      const b = Math.floor(Math.random() * 256)
-      const color = `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`
-      return color
+      const r = Math.floor(Math.random() * 256);
+      const g = Math.floor(Math.random() * 256);
+      const b = Math.floor(Math.random() * 256);
+      const color = `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
+      return color;
       // switch (index) {
       //   case 0:
       //     return this.progressColor[index]
@@ -289,9 +295,9 @@ export default {
       //     return this.progressColor[index]
       //     break;
       // }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
@@ -403,21 +409,18 @@ export default {
       box-sizing: content-box;
       padding-bottom: 20px;
       overflow: unset;
-      .search {
+      #search {
         display: flex;
-        text-align: center;
-        justify-content: space-between;
-        margin-left: 100px;
+        margin: 0 auto 30px ;
         width: 300px;
-        margin-top: 0px;
-        margin-bottom: 30px;
         .el-button {
-          margin-left: 0px;
-          border-radius: 0;
+          border-radius: 5px;
           font-size: 13px;
         }
-        .el-input__inner {
-          border-radius: 0;
+        /deep/ .el-input__inner {
+          width: 100%;
+          margin-left: 0;
+          border-radius: 5px;
           border: 1px solid #ccc;
         }
       }

@@ -19,7 +19,7 @@
   </div>
 </template>
 <script>
-import Cookie from 'js-cookie'
+import Cookie from 'js-cookie';
 
 export default {
   data() {
@@ -27,75 +27,75 @@ export default {
       // 用户数据表
       userinfo: {
         username: '',
-        password: ''
+        password: '',
       },
       // 登录
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 3, max: 12, message: '长度在 3 到 12 个字符', trigger: 'blur' }
+          { min: 3, max: 12, message: '长度在 3 到 12 个字符', trigger: 'blur' },
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur' }
-        ]
-      }
-    }
+          { min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur' },
+        ],
+      },
+    };
   },
   methods: {
     // 提交登录
     submitForm() {
       if (this.$refs.password.value.trim() == '') {
-        this.$refs.password.focus()
+        this.$refs.password.focus();
       } else {
-        this.$refs.userinfo.validate(async valid => {
+        this.$refs.userinfo.validate(async (valid) => {
           if (valid) {
             let data = this.$qs.stringify({
               username: this.userinfo.username,
-              password: this.userinfo.password
-            })
+              password: this.userinfo.password,
+            });
 
-            let res = await this.$http.post(this.$originUrl + '/api/users/login', data)
+            let res = await this.$http.post(this.$originUrl + '/api/users/login', data);
             if (res.data.status === 1) {
-              return this.$message.error(res.data.message)
+              return this.$message.error(res.data.message);
             }
             // 修改vuex的登录状态
-            this.$store.commit('changIsSignIn', 1)
+            this.$store.commit('changIsSignIn', 1);
             // 设置cookie
-            Cookie.set('token', res.data.token)
-            Cookie.set('username', this.userinfo.username)
-            Cookie.set('user_id', res.data.id)
-            Cookie.set('user_power', res.data.power)
+            Cookie.set('token', res.data.token);
+            Cookie.set('username', this.userinfo.username);
+            Cookie.set('user_id', res.data.id);
+            Cookie.set('user_power', res.data.power);
 
             // 修改vuex的token
-            this.$store.commit('setToken', res.data.token)
-            this.$store.commit('setUsername', res.data.username)
-            this.$store.commit('setId', res.data.id)
-            this.name = res.data.nickname || res.data.username
+            this.$store.commit('setToken', res.data.token);
+            this.$store.commit('setUsername', res.data.username);
+            this.$store.commit('setId', res.data.id);
+            this.name = res.data.nickname || res.data.username;
 
-            // 普通登录
-            this.$message.success(`登录成功，${this.name} 欢迎你！`)
             setTimeout(() => {
-              this.$router.push({ path: '/home' })
-            }, 1000)
+              this.$router.push({ path: '/home' });
+              // 普通登录
+              this.$message.success(`登录成功，${this.name} 欢迎你！`);
+            }, 1000);
           } else {
-            this.$message.error('用户名或者密码不合法！')
-            return false
+            this.$message.error('用户名或者密码不合法！');
+            return false;
           }
-        })
+        });
       }
     },
     resetForm() {
-      this.$refs.userinfo.resetFields()
+      this.$refs.userinfo.resetFields();
     },
     toSign() {
-      this.$emit('changeLoginStatus', 2)
+      this.$emit('changeLoginStatus', 2);
     },
     toAdmin() {
-      this.$emit('changeLoginStatus', 3)
-    }
-  }
-}
+      this.$emit('changeLoginStatus', 3);
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
@@ -122,7 +122,7 @@ export default {
     text-align: center;
     width: 500px;
     height: 300px;
-    border: 1px solid rgba(172, 172, 255, .8);
+    border: 1px solid rgba(172, 172, 255, 0.8);
     border-radius: 6px;
     box-shadow: 0 0 20px 20px rgba(142, 132, 132, 0.2);
     position: absolute;
