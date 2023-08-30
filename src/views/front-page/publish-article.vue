@@ -34,7 +34,7 @@
             <span slot="label">
               <span class="label">内容</span>
             </span>
-            <mavon-editor v-model="articleForm.content" :ishljs="true" @fullScreen="fullscreen" codeStyle="tomorrow-night"></mavon-editor>
+            <mavon-editor v-model="articleForm.content" :ishljs="true" @imgAdd="imgAdd" @fullScreen="fullscreen" codeStyle="tomorrow-night" ref="editorRef"></mavon-editor>
           </el-form-item>
         </el-form>
       </div>
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import Cookie from 'js-cookie'
+import Cookie from 'js-cookie';
 export default {
   data() {
     return {
@@ -57,7 +57,7 @@ export default {
         content: '',
         category: '',
         cover: '',
-        author: 0
+        author: 0,
         // time: ''
       },
       AllArticleClassName: [],
@@ -73,73 +73,73 @@ export default {
         ],
         catgory: [
           // { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-        ]
-      }
-    }
+        ],
+      },
+    };
   },
   created() {
-    this.GetAllArticleClassName()
+    this.GetAllArticleClassName();
   },
   methods: {
     trigger() {
-      this.$message.info('我还是个摆设哦，文章写完就点击发布吧。')
+      this.$message.info('我还是个摆设哦，文章写完就点击发布吧。');
     },
     // 编辑器全屏
     fullscreen(status, value) {
-      this.$store.commit('setFullScreen', status)
-      // console.log(status)
-      // console.log(value)
+      this.$store.commit('setFullScreen', status);
     },
     // 文章发布
     async submitArticle() {
-      // console.log(this.$store.state.username)
-      const params = new FormData()
-      // console.log(this.)
-      // console.log(this.$store.state)
-      this.articleForm.author_id = this.$store.state.id
-      // console.log(this.articleForm.author)
-      params.append('file', this.articleForm.cover)
+      const params = new FormData();
+      this.articleForm.author_id = this.$store.state.id;
+      params.append('file', this.articleForm.cover);
       // 依次将文章相关信息添加到params表单中
-      params.append('title', this.articleForm.title)
-      params.append('content', this.articleForm.content)
-      params.append('category', this.category)
-      params.append('author_id', Cookie.get('user_id'))
-      // console.log(params)
-      const { data: res } = await this.$http.post(this.$originUrl + '/article/add', params)
-      if (res.status !== 0) return this.$message.warning('文章发布失败！')
-      this.$message.success('文章发布成功！')
-      this.$router.push('/')
+      params.append('title', this.articleForm.title);
+      params.append('content', this.articleForm.content);
+      params.append('category', this.category);
+      params.append('author_id', Cookie.get('user_id'));
+      const { data: res } = await this.$http.post(this.$originUrl + '/article/add', params);
+      if (res.status !== 0) return this.$message.warning('文章发布失败！');
+      this.$message.success('文章发布成功！');
+      this.$router.push('/');
     },
-
+    // 图片上传事件
+    async imgAdd(pos, file) {
+      let imgData = new FormData();
+      console.log(pos, file);
+      // file.miniurl.replace(/^data:image\/\w+;base64,/, '')
+      imgData.append('file', file);
+      const { data: res } = await this.$http.post(this.$originUrl + '/article/imgupload', imgData);
+      if (res.status === 0) {
+        this.$refs.editorRef.$img2Url(pos, res.data);
+      }
+    },
     beforeAvatarUpload(file) {
-      let imgType = file.type.toLowerCase()
-      let limitType = ['image/jpeg', 'image/png', 'image/jpg']
-      const isLt2M = file.size / 1024 / 1024 < 2
+      let imgType = file.type.toLowerCase();
+      let limitType = ['image/jpeg', 'image/png', 'image/jpg'];
+      const isLt2M = file.size / 1024 / 1024 < 2;
       if (!limitType.includes(imgType)) {
-        return this.$message.error('请检查上传头像图片格式!')
+        return this.$message.error('请检查上传头像图片格式!');
       }
       if (!isLt2M) {
-        return this.$message.error('上传头像图片大小不能超过 2MB!')
+        return this.$message.error('上传头像图片大小不能超过 2MB!');
       }
       // 预览图地址
 
-      this.imageUrl = URL.createObjectURL(file)
+      this.imageUrl = URL.createObjectURL(file);
       // console.log(file)
       // 图片信息
-      this.articleForm.cover = file
+      this.articleForm.cover = file;
       // 如果要阻止默认的发送行为，就返回 false
-      return false
+      return false;
     },
     // 获取文章分类列表
     async GetAllArticleClassName() {
-      const { data: res } = await this.$http.get(this.$originUrl + '/article/cates')
-      this.AllArticleClassName = res.data
-      // console.log(res.data)
-      // this.tagCount = this.AllArticleClassName.length
-      // this.$store.commit('setTagCount', this.tagCount)
-    }
-  }
-}
+      const { data: res } = await this.$http.get(this.$originUrl + '/article/cates');
+      this.AllArticleClassName = res.data;
+    },
+  },
+};
 </script>
 <style lang="less" scoped>
 .el-main {

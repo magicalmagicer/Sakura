@@ -59,7 +59,7 @@ export default {
         content: '',
         category: '',
         pic_url: '',
-        author_id: 0
+        author_id: 0,
         // time: ''
       },
       // articleDetailForm: {},
@@ -77,15 +77,15 @@ export default {
         ],
         catgory: [
           // { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-        ]
-      }
-    }
+        ],
+      },
+    };
   },
   created() {
     // console.log(this.$route.params.id)
-    this.GetArticleDetail()
+    this.GetArticleDetail();
     // 请求文章分类名称
-    this.GetAllArticleClassName()
+    this.GetAllArticleClassName();
   },
   mounted() {
     // // 获取文本节点
@@ -96,123 +96,86 @@ export default {
   methods: {
     // 编辑器全屏
     fullscreen(status, value) {
-      this.$store.commit('setFullScreen', status)
+      this.$store.commit('setFullScreen', status);
     },
     // 图片上传事件
     async imgAdd(pos, file) {
-      let imgData = new FormData()
-      console.log('这是内容图片')
-      console.log(pos, file)
+      let imgData = new FormData();
+      console.log('这是内容图片');
+      console.log(pos, file);
       // file.miniurl.replace(/^data:image\/\w+;base64,/, '')
-      imgData.append('file', file)
-      // console.log(file)
-      const { data: res } = await this.$http.post(this.$originUrl + '/article/imgupload', imgData)
-      // console.log(res)
+      imgData.append('file', file);
+      const { data: res } = await this.$http.post(this.$originUrl + '/article/imgupload', imgData);
       if (res.status === 0) {
-        this.$refs.editorRef.$img2Url(pos, res.data)
+        this.$refs.editorRef.$img2Url(pos, res.data);
       }
     },
     // 移除图片
     imgDel(pos) {
-      console.log(pos)
-      // console.log(pos + 'hhhh')
-      // console.log(this.img_file[pos])
-      // delete this.img_file[pos];
+      console.log(pos);
     },
     back() {
-      this.$router.go(-1)
+      this.$router.go(-1);
     },
     // 请求文章详情
     async GetArticleDetail() {
-      const { data: res } = await this.$http.get(this.$originUrl + '/article/details', { params: { id: this.$route.params.id } })
-      this.articleDetailForm = res.data[0]
-      this.imgUrl = this.articleDetailForm.pic_url
-      this.originImgUrl = this.articleDetailForm.pic_url
+      const { data: res } = await this.$http.get(this.$originUrl + '/article/details', { params: { id: this.$route.params.id } });
+      this.articleDetailForm = res.data[0];
+      this.imgUrl = this.articleDetailForm.pic_url;
+      this.originImgUrl = this.articleDetailForm.pic_url;
       // console.log(this.articleDetailForm)
     },
     // 文章保存修改
     async submitNewArticle() {
-      const params = new FormData()
+      const params = new FormData();
       if (this.articleDetailForm.pic_url !== this.originImgUrl) {
-        params.append('file', this.articleDetailForm.pic_url)
+        params.append('file', this.articleDetailForm.pic_url);
         if (this.originImgUrl !== '') {
-          console.log(this.originImgUrl)
-          params.append('oldUrl', this.originImgUrl.split('uploads/')[1])
+          console.log(this.originImgUrl);
+          params.append('oldUrl', this.originImgUrl.split('uploads/')[1]);
         }
       }
 
       // 依次将文章相关信息添加到params表单中
-      params.append('title', this.articleDetailForm.title)
-      params.append('content', this.articleDetailForm.content)
-      // console.log(this.articleDetailForm.content)
-      params.append('category', this.articleDetailForm.category)
-      params.append('article_id', this.articleDetailForm.id)
-      // console.log('编辑页')
-      // console.log(params)
-      const { data: res } = await this.$http.post(this.$originUrl + '/article/edit', params)
+      params.append('title', this.articleDetailForm.title);
+      params.append('content', this.articleDetailForm.content);
+      params.append('category', this.articleDetailForm.category);
+      params.append('article_id', this.articleDetailForm.id);
+      const { data: res } = await this.$http.post(this.$originUrl + '/article/edit', params);
 
-      // console.log(res)
-      if (res.status !== 0) return this.$message.warning('文章修改失败！')
-      this.$message.success('文章修改成功！')
-      this.$router.push('/')
+      if (res.status !== 0) return this.$message.warning('文章修改失败！');
+      this.$message.success('文章修改成功！');
+      this.$router.push('/');
     },
 
     // 图片上传前处理函数
     beforeAvatarUpload(file) {
       console.log(file);
-      let imgType = file.type.toLowerCase()
-      let limitType = ['image/jpeg', 'image/png', 'image/jpg']
-      const isLt2M = file.size / 1024 / 1024 < 2
+      let imgType = file.type.toLowerCase();
+      let limitType = ['image/jpeg', 'image/png', 'image/jpg'];
+      const isLt2M = file.size / 1024 / 1024 < 2;
       if (!limitType.includes(imgType)) {
-        return this.$message.error('请检查上封面图片格式!')
+        return this.$message.error('请检查上封面图片格式!');
       }
       if (!isLt2M) {
-        return this.$message.error('上传封面大小不能超过 2MB!')
+        return this.$message.error('上传封面大小不能超过 2MB!');
       }
       // 预览图地址
-      this.imgUrl = URL.createObjectURL(file)
-      // console.log(file)
+      this.imgUrl = URL.createObjectURL(file);
       // 图片信息
-      this.articleDetailForm.pic_url = file
+      this.articleDetailForm.pic_url = file;
       // 如果要阻止默认的发送行为，就返回 false
-      // console.log('这是封面')
       // console.log(file)
-      return false
+      return false;
     },
 
     // 获取文章分类列表
     async GetAllArticleClassName() {
-      const { data: res } = await this.$http.get(this.$originUrl + '/article/cates')
-      this.AllArticleClassName = res.data
+      const { data: res } = await this.$http.get(this.$originUrl + '/article/cates');
+      this.AllArticleClassName = res.data;
     },
-    // paste(event) {
-    //   // 获取解析 粘贴的文本
-    //   let text = (event.clipboardData || window.clipboardData).getData("text");
-    //   console.log("text", text);
-    // }
-    // this.$ref['editorRef'].addEventListener('paste', function (e) {
-    //   if (!(e.clipboardData && e.clipboardData.items)) {
-    //     return;
-    //   }
-    //   for (var i = 0, len = e.clipboardData.items.length; i < len; i++) {
-    //     var item = e.clipboardData.items[i];
-    //     if (item.kind === "string") {
-    //       item.getAsString(function (str) {
-    //         console.log(str);
-    //       })
-    //     } else if (item.kind === "file") {
-    //       var f = item.getAsFile();
-    //       parseFile(f, 800, function (base64) {
-    //         $.post("/manager/uploadImg", { "imgStr": base64 }, function (data) {
-    //           $('#summernote').summernote('editor.insertImage', data.msg);
-    //         });
-    //       })
-    //       console.log(f);
-    //     }
-    //   }
-    // })
-  }
-}
+  },
+};
 </script>
 <style lang="less" scoped>
 .el-main {
