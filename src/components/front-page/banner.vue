@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
 .header {
   width: 1200px;
   margin: auto;
