@@ -74,7 +74,6 @@ export default {
     },
 
     changeLoginStatus(status) {
-      console.log('提交了登陆状态', status)
       this.status = status
     }
   },

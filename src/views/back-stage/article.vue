@@ -20,21 +20,15 @@
       <!-- 文章表格 -->
       <el-table :data="booklist" border stripe>
         <el-table-column type="index" label="#" :index="count"></el-table-column>
-        <el-table-column label="标题" prop="title" show-overflow-tooltip></el-table-column>
+        <el-table-column label="标题" prop="title" show-overflow-tooltip width="300px"></el-table-column>
         <el-table-column label="分类" prop="category" width="100px"></el-table-column>
         <el-table-column label="文章内容" prop="content" show-overflow-tooltip=""></el-table-column>
         <el-table-column label="作者" prop="nickname" width="130px"></el-table-column>
-        <el-table-column label="发布时间" prop="create_time" width="100px"></el-table-column>
-        <el-table-column label="操作" align="center" width="80px">
+        <el-table-column label="发布时间" prop="create_time" width="130px" align="center"></el-table-column>
+        <el-table-column label="操作" align="center" width="100px">
           <template slot-scope="scope">
-            <!-- 修改 -->
-            <!-- <el-button type="primary" size="mini" icon="el-icon-edit" @click="showEditDialog(scope.row.id)"></el-button> -->
             <!-- 删除 -->
             <el-button type="danger" size="mini" icon="el-icon-delete" @click="removeArticle(scope.row.id)"></el-button>
-            <!-- 分配 -->
-            <!-- <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-              <el-button type="warning" size="mini" icon="el-icon-setting" @click="setRole(scope.row)"></el-button>
-            </el-tooltip> -->
           </template>
         </el-table-column>
       </el-table>
