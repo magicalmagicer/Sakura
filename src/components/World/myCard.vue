@@ -28,7 +28,7 @@
         <span slot="label">
           <span class="label">头像</span>
         </span>
-        <el-upload class="avatar-uploader" :show-file-list="false" :before-upload="beforeAvatarUpload" action="http://127.0.0.1:3007/avatar">
+        <el-upload class="avatar-uploader" :show-file-list="false" :before-upload="beforeAvatarUpload" action="http://43.138.252.149:3007/avatar">
           <el-image v-if="imgUrl" :src="imgUrl" class="avatar" fit="contain" />
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
