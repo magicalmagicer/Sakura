@@ -114,12 +114,6 @@ export default router
 router.beforeEach((to, from, next) => {
   // 刷新页面会丢失登录状态，所以刷新后要从Cookie里获取token再次存放在vuex
   if (Cookie.get('token')) store.commit('setToken', Cookie.get('token'))
-  //  判断有无token，有则设置当前状态为登录状态
-  if (Cookie.get('token')) {
-    store.commit('changIsSignIn', 1)
-  } else {
-    store.commit('changIsSignIn', 0)
-  }
   // 判断有没有登录
   if (store.state.token) {
     next()

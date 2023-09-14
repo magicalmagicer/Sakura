@@ -17,10 +17,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
-      <!-- <el-menu-item index="/article" v-if="username == '123'">管理员</el-menu-item> -->
     </el-menu>
-    <!-- 音乐播放器 -->
-    <!-- <record></record> -->
     <!-- 封面 -->
     <banner v-if="$route.path != '/about'"></banner>
     <el-container>
@@ -40,6 +37,7 @@ import Footer from '@/components/front-page/footer.vue'
 import banner from '@/components/front-page/banner.vue'
 import Cookie from 'js-cookie'
 import FooterBar from '@/components/music/musicPlayer.vue'
+import handleCookies from '@/utils/cookie.js'
 export default {
   components: {
     Footer,
@@ -70,16 +68,13 @@ export default {
     }
   },
   async beforeRouteUpdate(to, from, next) {
-    // console.log(to, '组件独享守卫beforeRouteEnter第一个参数')
     if (to.path == '/write') {
       const { data: res } = await this.$http.get(this.$originUrl + '/my/power', { params: { id: Cookie.get('user_id') } })
-      // console.log(res.data.power)
       if (res.data.power) {
         next()
       } else {
         this.$message.info('您的无权限进入该页面！')
       }
-      // console.log('我是组件')
     } else {
       next()
     }
@@ -87,23 +82,13 @@ export default {
   methods: {
     exit() {
       // 清除Cookie
-      Cookie.remove('token')
-      Cookie.remove('username')
-      // 清除sessionStorage
-      sessionStorage.clear()
+      handleCookies('remove')
       this.$router.push({ path: '/entrance' })
-      // 修改vuex的登录状态
-      this.$store.commit('changIsSignIn', 0)
-      // // 修改vuex的token
-      // this.$store.commit('setToken', '')
-      // locapam=tion.reload()
+    
     },
     //获取用户头像
     async getUserAvatar() {
-      const { data: res } = await this.$http.get(this.$originUrl + '/my/userinfo', { params: { id: Cookie.get('user_id') } })
-      // console.log(res.data)
-      this.userAvatar = res.data.avatar
-      // console.log(this.userAvatar)
+      this.userAvatar = Cookie.get('avatar')
     },
     toMyWorld() {
       this.$router.push(`/myworld/${Cookie.get('user_id')}`)

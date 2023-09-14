@@ -78,9 +78,6 @@ export default {
     }
   },
   created() {
-    this.$store.commit('changIsSignIn', 0)
-    // console.log(this.$store.state.isSignIn)
-    // if (this.$store.state.isSignIn == 1) this.GetInfo()
   },
   mounted() {
     this.setTimer()

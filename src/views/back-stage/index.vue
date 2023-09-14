@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import handleCookies from '@/utils/cookie.js'
 export default {
   created() {
     // this.getMenuList()
@@ -93,12 +94,11 @@ export default {
       this.isCollaspe = !this.isCollaspe
     },
     logout() {
-      window.sessionStorage.clear()
+      handleCookies('remove')
       this.$router.push('/entrance')
     },
     async getMenuList() {
       const { data: res } = await this.$http.get('menus')
-      // console.log(res)
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
       this.menuList = res.data
     },

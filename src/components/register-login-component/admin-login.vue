@@ -18,8 +18,8 @@
   </div>
 </template>
 <script>
-import Cookie from 'js-cookie'
 
+import handleCookies from '@/utils/cookie.js'
 export default {
   data() {
     return {
@@ -78,17 +78,14 @@ export default {
             if (res.data.status === 1) {
               return this.$message.error(res.data.message)
             } else {
-              // 修改vuex的登录状态
-              this.$store.commit('changIsSignIn', 1)
               // 设置cookie
-              Cookie.set('token', res.data.token)
-              Cookie.set('username', this.userinfo.username)
-              Cookie.set('user_id', res.data.id)
-              Cookie.set('user_power', res.data.power)
-
+              // Cookie.set('token', res.data.token)
+              // Cookie.set('username', this.userinfo.username)
+              // Cookie.set('user_id', res.data.id)
+              // Cookie.set('user_power', res.data.power)
+              handleCookies('set',res.data)
               // 修改vuex的token
               this.$store.commit('setToken', res.data.token)
-              this.$store.commit('setUsername', res.data.username)
               this.$store.commit('setId', res.data.id)
               if (res.data.nickname) {
                 this.name = res.data.nickname
@@ -119,7 +116,6 @@ export default {
     }
   },
   created() {
-    this.$store.commit('changIsSignIn', 0)
   },
   mounted() {
     this.setTimer()

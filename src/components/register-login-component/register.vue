@@ -1,5 +1,5 @@
 <template>
-  <div class="block" v-if="$store.state.isSignIn == 0">
+  <div class="block">
     <h3>用户注册</h3>
     <!-- 注册表单 -->
     <el-form :model="userinfo" status-icon :rules="rules" ref="userinfo" label-width="100px" class="demo-userinfo" label-position="right">

@@ -29,9 +29,6 @@ export default new Vuex.Store({
     fullScreen: false
   },
   mutations: {
-    changIsSignIn(state, n) {
-      state.isSignIn = n
-    },
     setToken(state, val) {
       state.token = val
     },

@@ -22,7 +22,6 @@
               </template>
               <el-menu-item-group>
                 <el-menu-item :index="path.message1" @click="changePath(path.message1)">
-                  <!-- el-icon-document -->
                   <i class="el-icon-document"></i>
                   <span slot="title" class="span">
                     给我留言

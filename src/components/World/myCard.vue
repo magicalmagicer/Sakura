@@ -86,8 +86,8 @@
         </el-form-item>
       </el-form>
       <div class="bottom">
-        <el-button class="button" @click="saveEmail" type="danger" size="small">确认修改</el-button>
-        <el-button class="button" @click="passwordDialog = false" type="info" size="small">放弃修改</el-button>
+        <el-button class="button" @click="saveEmail" type="danger" size="small">确认绑定</el-button>
+        <el-button class="button" @click="emailDialog = false" type="info" size="small">放弃修改</el-button>
       </div>
     </el-dialog>
   </div>
@@ -95,6 +95,7 @@
 
 <script>
 import Cookie from 'js-cookie';
+import { init } from 'tocbot';
 export default {
   data() {
     var validatePass2 = (rule, value, callback) => {
@@ -189,10 +190,24 @@ export default {
     };
   },
   created() {
-    this.getUserInfo();
+    this.init();
+    // this.getUserInfo();
   },
   methods: {
+    init() {
+      let initialData = {
+        username: Cookie.get('username'),
+        nickname: Cookie.get('nickname'),
+        avatar: Cookie.get('avatar'),
+        email: Cookie.get('email'),
+      };
+      this.userInfoForm = Object.assign(this.userInfoForm,initialData);
+      this.originForm = JSON.parse(JSON.stringify(this.userInfoForm));
+      this.originImgUrl = this.userInfoForm.avatar;
+      this.imgUrl = this.userInfoForm.avatar;
+    },
     changeState() {
+      if (!this.userInfoForm.email) return this.$message.warning('请先绑定邮箱！');
       this.pwdForm.email = this.userInfoForm.email;
       this.passwordDialog = true;
     },
@@ -237,13 +252,13 @@ export default {
       // 未绑定邮箱
       if (!this.emailForm.old_email) {
         if (!this.emailForm.new_code || !this.emailForm.new_email) {
-          return this.$message.error('请输入邮箱和验证码！');
+          return this.$message.warning('请输入邮箱和验证码！');
         }
         this.sendChangeEmailReq();
       } else {
         // 邮箱换绑
         if (!this.emailForm.new_code || !this.emailForm.new_email || !this.emailForm.old_code) {
-          return this.$message.error('请输入邮箱和验证码！');
+          return this.$message.warning('请输入邮箱和验证码！');
         }
         this.sendChangeEmailReq();
       }

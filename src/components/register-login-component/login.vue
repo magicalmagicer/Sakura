@@ -19,8 +19,8 @@
   </div>
 </template>
 <script>
-import Cookie from 'js-cookie';
 
+import handleCookies from '@/utils/cookie.js'
 export default {
   data() {
     return {
@@ -59,17 +59,18 @@ export default {
             if (res.data.status === 1) {
               return this.$message.error(res.data.message);
             }
-            // 修改vuex的登录状态
-            this.$store.commit('changIsSignIn', 1);
             // 设置cookie
-            Cookie.set('token', res.data.token);
-            Cookie.set('username', this.userinfo.username);
-            Cookie.set('user_id', res.data.id);
-            Cookie.set('user_power', res.data.power);
-
+            // Cookie.set('token', res.data.token);
+            // Cookie.set('username', res.data.username);
+            // Cookie.set('user_id', res.data.id);
+            // Cookie.set('user_power', res.data.power);
+            // Cookie.set('email', res.data.email);
+            // Cookie.set('avatar', res.data.avatar);
+            // Cookie.set('nickname', res.data.nickname);
+            // console.log(res.data['username']);
+            handleCookies('set', res.data)
             // 修改vuex的token
             this.$store.commit('setToken', res.data.token);
-            this.$store.commit('setUsername', res.data.username);
             this.$store.commit('setId', res.data.id);
             this.name = res.data.nickname || res.data.username;
 
@@ -202,5 +203,8 @@ export default {
   /deep/ .el-form-item__label {
     color: #fff;
   }
+}
+/deep/ .el-input__inner::-ms-reveal {
+  display: none;
 }
 </style>
