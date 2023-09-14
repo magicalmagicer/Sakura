@@ -86,7 +86,7 @@ export default {
               handleCookies('set',res.data)
               // 修改vuex的token
               this.$store.commit('setToken', res.data.token)
-              this.$store.commit('setId', res.data.id)
+              this.$store.commit('setId', res.data.user_id)
               if (res.data.nickname) {
                 this.name = res.data.nickname
               } else {
@@ -95,7 +95,7 @@ export default {
 
               // 管理员登陆
               console.log('管理员登陆')
-              if (res.data.power >= 2) {
+              if (res.data.user_power >= 2) {
                 this.$message.success(`登录后台管理系统成功，${this.name} 欢迎你！`)
                 setTimeout(() => {
                   this.$router.push('/backstage')
@@ -231,5 +231,8 @@ export default {
   /deep/ .el-form-item__label {
     color: #fff;
   }
+}
+/deep/ .el-input__inner::-ms-reveal {
+  display: none;
 }
 </style>

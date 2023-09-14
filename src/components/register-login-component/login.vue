@@ -71,7 +71,7 @@ export default {
             handleCookies('set', res.data)
             // 修改vuex的token
             this.$store.commit('setToken', res.data.token);
-            this.$store.commit('setId', res.data.id);
+            this.$store.commit('setId', res.data.user_id);
             this.name = res.data.nickname || res.data.username;
 
             setTimeout(() => {

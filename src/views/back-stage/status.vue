@@ -19,7 +19,7 @@
         </el-select>
       </div>
       <div class="second">
-        <dv-scroll-board :config="config" style="width: 100%; height: 580px" />
+        <dv-scroll-board :config="config" style="width: 100%; height: 85vh" />
       </div>
     </div>
   </div>
@@ -288,7 +288,6 @@ export default {
       });
     },
     changeConfig() {
-      console.log('触发了changeConfig' + this.value + '月');
       let num = Number(this.value) || new Date().getMonth() + 1;
       this.month = num;
       let currentData = [...this.loginData[num - 1]];
@@ -301,9 +300,10 @@ export default {
         headerBGC: '#eb5a6d', // 表头背景色
         oddRowBGC: '#2991D5', // 奇数行背景色
         evenRowBGC: '#08BACD', // 偶数行背景色
-        waitTime: 2000, // 轮播时间间隔(ms)
+        waitTime: 1000, // 轮播时间间隔(ms)
         align: ['center'],
         data: data,
+        headerHeight:50
       };
     },
     async getLoginData() {
@@ -339,20 +339,17 @@ export default {
   background: #fff;
 
   .first {
-    // flex-shrink: 0;
     position: relative;
-    height: 586px;
-    // border: 1px solid red;
+    height: 85vh;
     box-sizing: border-box;
     padding: 10px;
-    // width: 50%;
-    flex: 3;
+    flex: 6;
     #echart {
       width: 100%;
-      height: 50%;
+      height: 60%;
     }
     #pie {
-      height: 50%;
+      height: 40%;
     }
     .yearselect {
       position: absolute;
@@ -370,15 +367,15 @@ export default {
   }
   .second {
     width: 0;
-    // flex-shrink: 0;
-    height: 586px;
+    height: 85vh;
     margin: auto;
-
     flex: 2;
     .dv-scroll-board {
       overflow: hidden;
       border-radius: 8px;
-      // display: flex;
+      .header {
+        height: 50px;
+      }
       
     }
     .text {

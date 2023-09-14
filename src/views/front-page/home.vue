@@ -167,7 +167,7 @@ export default {
     // 计算百分比
     progressData() {
       return function (num) {
-        return (Number(num) / Number(this.first)).toFixed(2) * 100;
+        return (Number(num)* 100 / Number(this.first)).toFixed(2) ;
       };
     },
   },
@@ -255,7 +255,6 @@ export default {
       let time = new Date().toLocaleDateString().split('/');
       let month = time[1].length > 1 ? time[1] : '0' + time[1];
       let date = time[0] + '-' + month;
-      // console.log(date);
       const { data: res } = await this.$http.get(this.$originUrl + '/my/activity', {
         params: {
           date,
@@ -263,10 +262,7 @@ export default {
       });
       if (res.status !== 0) return;
       this.activityList = res.data;
-
       this.first = res.data[0].times;
-
-      console.log(this.first);
     },
     // 排行榜颜色
     selectColor(index) {
@@ -275,26 +271,6 @@ export default {
       const b = Math.floor(Math.random() * 256);
       const color = `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
       return color;
-      // switch (index) {
-      //   case 0:
-      //     return this.progressColor[index]
-      //     break;
-      //   case 1:
-      //     return this.progressColor[index]
-      //     break;
-      //   case 2:
-      //     return this.progressColor[index]
-      //     break;
-      //   case 3:
-      //     return this.progressColor[index]
-      //     break;
-      //   case 4:
-      //     return this.progressColor[index]
-      //     break;
-      //   case 5:
-      //     return this.progressColor[index]
-      //     break;
-      // }
     },
   },
 };
